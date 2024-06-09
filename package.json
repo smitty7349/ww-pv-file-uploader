@@ -1,0 +1,16 @@
+{
+  "name": "weweb-primevue-file-uploader",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "weweb build",
+    "serve": "weweb serve"
+  },
+  "devDependencies": {
+    "@weweb/cli": "latest"
+  },
+  "dependencies": {
+    "@uploadcare/upload-client": "^6.14.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^3.52.0"
+  }
+}
