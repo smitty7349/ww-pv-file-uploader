@@ -36,7 +36,7 @@
           >
         </div>
       </template>
-      <template>
+      <template #content="{ removeUploadedFileCallback, removeFileCallback }">
         <div v-if="localFiles.length > 0">
           <h5>Pending</h5>
           <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -51,7 +51,12 @@
               <span class="font-semibold">{{ file.name }}</span>
               <div>{{ formatSize(file.size) }}</div>
               <PVBadge value="Pending" severity="warning" />
-              <PVButton icon="pi pi-times" @click="onRemoveTemplatingFile(file, index)" rounded severity="danger" />
+              <PVButton
+                icon="pi pi-times"
+                @click="onRemoveTemplatingFile(file, removeFileCallback, index)"
+                rounded
+                severity="danger"
+              />
             </div>
           </div>
         </div>
@@ -136,14 +141,8 @@ export default {
     }
   },
   methods: {
-    formatSize(size) {
-      if (size === 0) return "0 B"
-      const i = Math.floor(Math.log(size) / Math.log(1024))
-      return `${(size / Math.pow(1024, i)).toFixed(2) * 1} ${["B", "KB", "MB", "GB", "TB"][i]}`
-    },
-    onRemoveTemplatingFile(file, index) {
-      this.localFiles.splice(index, 1)
-    },
+    formatSize() {},
+    onRemoveTemplatingFile() {},
     async removeUploadedFileCallback(index) {
       await deleteFile(this.uploadedFiles[index].uuid, { publicKey: this.content.publicKey })
     },
