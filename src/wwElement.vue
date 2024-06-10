@@ -36,7 +36,7 @@
           >
         </div>
       </template>
-      <template #content="{ removeUploadedFileCallback, removeFileCallback }">
+      <template #content>
         <div v-if="localFiles.length > 0">
           <h5>Pending</h5>
           <div class="flex flex-wrap p-0 sm:p-5 gap-5">
@@ -51,12 +51,7 @@
               <span class="font-semibold">{{ file.name }}</span>
               <div>{{ formatSize(file.size) }}</div>
               <PVBadge value="Pending" severity="warning" />
-              <PVButton
-                icon="pi pi-times"
-                @click="onRemoveTemplatingFile(file, removeFileCallback, index)"
-                rounded
-                severity="danger"
-              />
+              <PVButton icon="pi pi-times" @click="onRemoveTemplatingFile(file, index)" rounded severity="danger" />
             </div>
           </div>
         </div>
@@ -131,18 +126,20 @@ export default {
        * @type {UploadClient | null}
        */
       client: null,
-      /**
-       * @type {RestClient | null}
-       */
-      restClient: null,
       fileInput: null,
       localFiles: [],
       uploadedFiles: [],
     }
   },
   methods: {
-    formatSize() {},
-    onRemoveTemplatingFile() {},
+    formatSize(size) {
+      if (size === 0) return "0 B"
+      const i = Math.floor(Math.log(size) / Math.log(1024))
+      return `${(size / Math.pow(1024, i)).toFixed(2) * 1} ${["B", "KB", "MB", "GB", "TB"][i]}`
+    },
+    onRemoveTemplatingFile(file, index) {
+      this.localFiles.splice(index, 1)
+    },
     async removeUploadedFileCallback(index) {
       await deleteFile(this.uploadedFiles[index].uuid, { publicKey: this.content.publicKey })
     },
@@ -150,6 +147,7 @@ export default {
     async onSelect(event) {
       const file = event.files[0]
       this.localFiles.push(file)
+      console.log("this.localFiles :", this.localFiles)
       const result = await this.client.uploadFile(new File([file], file.name), {
         publicKey: "6c7663f9a55af1ca85dd",
         store: "auto",
@@ -158,14 +156,13 @@ export default {
           pet: "cat",
         },
       })
-      console.log(result)
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
       this.uploadedFiles.push(result)
+      console.log("this.uploadedFiles :", this.uploadedFiles)
     },
   },
   mounted() {
     this.client = new UploadClient({ publicKey: this.content.publicKey })
-    // this.restClient = new RestClient({ publicKey: this.content.publicKey })
   },
 }
 </script>
