@@ -168,4 +168,9 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(button.p-button.p-button-icon-only.p-button-rounded) {
+  text-align: center;
+  border-width: unset;
+}
+</style>
