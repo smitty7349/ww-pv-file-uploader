@@ -25,5 +25,7 @@ git push --follow-tags
 
 git checkout dev
 
+git merge master
+
 PACKAGE_VERSION=$(node -p "require('./package.json').version")
 echo "Version $TAG (package: $PACKAGE_VERSION) has been deployed to master and dev branches."
