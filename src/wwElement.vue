@@ -8,11 +8,12 @@
       :maxFileSize="1000000"
       customUpload
       @uploader="onSelect"
+      :disabled="!content.publicKey"
     >
       <template #header="{ chooseCallback, uploadCallback, clearCallback }">
         <div class="flex flex-wrap justify-between items-center flex-1 gap-2">
           <div class="flex gap-2">
-            <PVButton @click="chooseCallback()" icon="pi pi-images" rounded></PVButton>
+            <PVButton @click="chooseCallback()" icon="pi pi-images" rounded :disabled="!content.publicKey"></PVButton>
             <!-- <PVButton
               @click="uploadEvent(uploadCallback)"
               icon="pi pi-cloud-upload"
@@ -25,7 +26,7 @@
               icon="pi pi-times"
               rounded
               severity="danger"
-              :disabled="!localFiles || localFiles.length === 0"
+              :disabled="!content.publicKey || !localFiles || localFiles.length === 0"
             ></PVButton>
           </div>
           <PVProgressBar
@@ -76,7 +77,7 @@
         </div>
       </template>
       <template #empty>
-        <div class="flex items-center justify-center flex-col">
+        <div class="flex items-center justify-center flex-col" :class="{ 'pointer-events-none': !content.publicKey }">
           <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400 rounded-full" />
           <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
         </div>
