@@ -1,3 +1,9 @@
+# Make sure working directory is clean
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Error: Working directory is not clean."
+  exit 1
+fi
+
 git checkout master
 git pull
 git merge dev
