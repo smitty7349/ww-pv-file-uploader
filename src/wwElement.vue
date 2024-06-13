@@ -30,10 +30,10 @@
             ></PVButton>
           </div>
           <PVProgressBar
-            :value="totalSizePercent"
+            :value="uploadProgressPercent"
             :showValue="false"
-            :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto', { 'exceeded-progress-bar': totalSizePercent > 100 }]"
-            ><span class="white-space-nowrap">{{ totalSize }}B / 1Mb</span></PVProgressBar
+            :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto']"
+            ><span class="white-space-nowrap">{{ uploadProgressPercent }}%</span></PVProgressBar
           >
         </div>
       </template>
@@ -47,7 +47,7 @@
               class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
             >
               <div>
-                <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
+                <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" />
               </div>
               <span class="font-semibold">{{ file.name }}</span>
               <div>{{ formatSize(file.size) }}</div>
@@ -65,8 +65,8 @@
               :key="file.name + file.type + file.size"
               class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
             >
-              <div>
-                <img role="presentation" :alt="file.name" :src="file.cdnUrl" width="100" height="50" />
+              <div @click="editingFile = file">
+                <img role="presentation" :alt="file.name" :src="file.cdnUrl" width="100" />
               </div>
               <span class="font-semibold">{{ file.name }}</span>
               <div>{{ formatSize(file.size) }}</div>
@@ -83,6 +83,26 @@
         </div>
       </template>
     </PVFileUpload>
+    <PVDialog :header="editingFile?.name" v-model:visible="showEditFileModal" modal>
+      <div class="flex">
+        <img :src="editingFile?.cdnUrl" alt="file" width="300" style="border-radius: 24px" />
+        <div class="flex flex-col gap-3 p-3">
+          <!-- Download -->
+          <PVButton label="Download" icon="pi pi-download" class="mt-3" @click="downloadFile" />
+          <!-- Copy link -->
+          <PVButton
+            :label="copiedLink ? 'Copied' : 'Copy link'"
+            :icon="copiedLink ? 'pi pi-check' : 'pi pi-link'"
+            class="mt-3"
+            @click="copyLink"
+          />
+        </div>
+      </div>
+      <p>{{ formatSize(editingFile?.size) }}</p>
+      <h3>Transformations</h3>
+      <h4>Smart scale crop</h4>
+      <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
+    </PVDialog>
   </div>
 </template>
 
@@ -96,6 +116,7 @@ import "primevue/resources/themes/aura-light-green/theme.css"
 import "primeicons/primeicons.css"
 import { UploadClient } from "@uploadcare/upload-client"
 import { deleteFile } from "@uploadcare/rest-client"
+import Dialog from "primevue/dialog"
 
 export default {
   beforeCreate() {
@@ -115,6 +136,7 @@ export default {
     this.$.appContext.app.component("PVBadge", Badge)
     this.$.appContext.app.component("PVButton", Button)
     this.$.appContext.app.component("PVProgressBar", ProgressBar)
+    this.$.appContext.app.component("PVDialog", Dialog)
   },
   props: {
     content: { type: Object, required: true },
@@ -130,7 +152,26 @@ export default {
       fileInput: null,
       localFiles: [],
       uploadedFiles: [],
+      uploadProgressPercent: 0,
+      editingFile: null,
+      showEditFileModal: false,
+      copiedLink: false,
     }
+  },
+  watch: {
+    editingFile: {
+      handler() {
+        this.showEditFileModal = !!this.editingFile
+      },
+      immediate: true,
+    },
+    showEditFileModal: {
+      handler() {
+        if (!this.showEditFileModal) {
+          this.editingFile = null
+        }
+      },
+    },
   },
   methods: {
     formatSize(size) {
@@ -142,24 +183,59 @@ export default {
       this.localFiles.splice(index, 1)
     },
     async removeUploadedFileCallback(index) {
-      await deleteFile(this.uploadedFiles[index].uuid, { publicKey: this.content.publicKey })
+      const originalLength = this.uploadedFiles.length
+      this.uploadedFiles.splice(index, 1)
+      this.uploadProgressPercent = (this.uploadedFiles.length / originalLength) * 100
     },
     uploadEvent() {},
     async onSelect(event) {
       const file = event.files[0]
       this.localFiles.push(file)
       console.log("this.localFiles :", this.localFiles)
+      this.uploadProgressPercent = 0
       const result = await this.client.uploadFile(new File([file], file.name), {
-        publicKey: "6c7663f9a55af1ca85dd",
+        publicKey: this.content.publicKey,
         store: "auto",
         metadata: {
           subsystem: "js-client",
           pet: "cat",
         },
+        onProgress: (progress) => {
+          this.uploadProgressPercent = progress.value * 100
+          console.log("progress :", progress)
+        },
       })
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
       this.uploadedFiles.push(result)
       console.log("this.uploadedFiles :", this.uploadedFiles)
+    },
+    async downloadFile() {
+      const link = document.createElement("a")
+      link.href = this.editingFile.cdnUrl
+      link.download = this.editingFile.name
+      link.click()
+    },
+    async copyLink() {
+      try {
+        await navigator.clipboard.writeText(this.editingFile.cdnUrl)
+      } catch (error) {
+        console.error("Failed to copy: ", error)
+        // Try another way
+        let x = window.scrollX
+        let y = window.scrollY
+        const textArea = document.createElement("textarea")
+        textArea.value = this.editingFile.cdnUrl
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        document.execCommand("copy")
+        document.body.removeChild(textArea)
+        window.scrollTo(x, y)
+      }
+      this.copiedLink = true
+      setTimeout(() => {
+        this.copiedLink = false
+      }, 2000)
     },
   },
   mounted() {
@@ -168,4 +244,9 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(button.p-button.p-button-icon-only.p-button-rounded) {
+  text-align: center;
+  border-width: unset;
+}
+</style>
