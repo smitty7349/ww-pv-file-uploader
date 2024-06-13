@@ -99,6 +99,7 @@ import { UploadClient } from "@uploadcare/upload-client"
 import Dialog from "primevue/dialog"
 import FileModal from "./FileModal.vue"
 import { formatSize } from "./composables"
+import InputSwitch from "primevue/inputswitch"
 
 export default {
   beforeCreate() {
@@ -119,6 +120,7 @@ export default {
     this.$.appContext.app.component("PVButton", Button)
     this.$.appContext.app.component("PVProgressBar", ProgressBar)
     this.$.appContext.app.component("PVDialog", Dialog)
+    this.$.appContext.app.component("PVInputSwitch", InputSwitch)
   },
   components: {
     FileModal,

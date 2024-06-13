@@ -1,5 +1,4 @@
 <script>
-import { defineProps, ref, watch, toRef } from "vue"
 import { formatSize } from "./composables"
 
 export default {
@@ -20,6 +19,27 @@ export default {
     return {
       copiedLink: false,
     }
+  },
+
+  computed: {
+    smartScaleCrop: {
+      get() {
+        return this.editingFile?.cdnUrl.includes("-/scale_crop/500x500/smart")
+      },
+      set(value) {
+        if (value) {
+          this.$emit("update:editingFile", {
+            ...this.editingFile,
+            cdnUrl: this.editingFile.cdnUrl + "-/scale_crop/500x500/smart",
+          })
+        } else {
+          this.$emit("update:editingFile", {
+            ...this.editingFile,
+            cdnUrl: this.editingFile.cdnUrl.replace("-/scale_crop/500x500/smart", ""),
+          })
+        }
+      },
+    },
   },
 
   watch: {
@@ -90,7 +110,13 @@ export default {
     </div>
     <p>{{ formatSize(editingFile?.size) }}</p>
     <h3>Transformations</h3>
-    <h4>Smart scale crop</h4>
+    <h4>
+      <div class="flex items-center">
+        <PVInputSwitch v-model="smartScaleCrop" />
+        <span class="ml-3">Smart scale crop</span>
+      </div>
+    </h4>
     <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
+    <div></div>
   </PVDialog>
 </template>
