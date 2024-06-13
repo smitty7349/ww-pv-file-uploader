@@ -18,6 +18,8 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ### 0.0.4
 
+- basic true/false smart scale crop transformation
+
 ### 0.0.3
 
 - fix buttons' icons not being centered
