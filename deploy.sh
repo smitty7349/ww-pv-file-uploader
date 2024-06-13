@@ -6,7 +6,7 @@ fi
 
 git checkout master
 git pull
-git merge dev
+git merge dev -m "Merge dev branch into master" --no-edit
 
 # Ensure the argument is provided
 if [ -z "$1" ]; then
@@ -26,6 +26,7 @@ git push --follow-tags
 git checkout dev
 
 git merge master
+git push
 
 PACKAGE_VERSION=$(node -p "require('./package.json').version")
 echo "Version $TAG (package: $PACKAGE_VERSION) has been deployed to master and dev branches."
