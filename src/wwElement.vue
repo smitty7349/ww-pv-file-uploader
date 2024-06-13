@@ -30,10 +30,10 @@
             ></PVButton>
           </div>
           <PVProgressBar
-            :value="totalSizePercent"
+            :value="uploadProgressPercent"
             :showValue="false"
-            :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto', { 'exceeded-progress-bar': totalSizePercent > 100 }]"
-            ><span class="white-space-nowrap">{{ totalSize }}B / 1Mb</span></PVProgressBar
+            :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto']"
+            ><span class="white-space-nowrap">{{ uploadProgressPercent }}%</span></PVProgressBar
           >
         </div>
       </template>
@@ -65,7 +65,7 @@
               :key="file.name + file.type + file.size"
               class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
             >
-              <div>
+              <div @click="editingFile = file">
                 <img role="presentation" :alt="file.name" :src="file.cdnUrl" width="100" height="50" />
               </div>
               <span class="font-semibold">{{ file.name }}</span>
@@ -83,6 +83,7 @@
         </div>
       </template>
     </PVFileUpload>
+    <PVDialog header="Header" :visible="editingFile !== null" :style="{ width: '25rem' }"> Hi there </PVDialog>
   </div>
 </template>
 
@@ -96,6 +97,7 @@ import "primevue/resources/themes/aura-light-green/theme.css"
 import "primeicons/primeicons.css"
 import { UploadClient } from "@uploadcare/upload-client"
 import { deleteFile } from "@uploadcare/rest-client"
+import Dialog from "primevue/dialog"
 
 export default {
   beforeCreate() {
@@ -115,6 +117,7 @@ export default {
     this.$.appContext.app.component("PVBadge", Badge)
     this.$.appContext.app.component("PVButton", Button)
     this.$.appContext.app.component("PVProgressBar", ProgressBar)
+    this.$.appContext.app.component("PVDialog", Dialog)
   },
   props: {
     content: { type: Object, required: true },
@@ -130,6 +133,8 @@ export default {
       fileInput: null,
       localFiles: [],
       uploadedFiles: [],
+      uploadProgressPercent: 0,
+      editingFile: null,
     }
   },
   methods: {
@@ -142,19 +147,26 @@ export default {
       this.localFiles.splice(index, 1)
     },
     async removeUploadedFileCallback(index) {
-      await deleteFile(this.uploadedFiles[index].uuid, { publicKey: this.content.publicKey })
+      const originalLength = this.uploadedFiles.length
+      this.uploadedFiles.splice(index, 1)
+      this.uploadProgressPercent = (this.uploadedFiles.length / originalLength) * 100
     },
     uploadEvent() {},
     async onSelect(event) {
       const file = event.files[0]
       this.localFiles.push(file)
       console.log("this.localFiles :", this.localFiles)
+      this.uploadProgressPercent = 0
       const result = await this.client.uploadFile(new File([file], file.name), {
-        publicKey: "6c7663f9a55af1ca85dd",
+        publicKey: this.content.publicKey,
         store: "auto",
         metadata: {
           subsystem: "js-client",
           pet: "cat",
+        },
+        onProgress: (progress) => {
+          this.uploadProgressPercent = progress.value * 100
+          console.log("progress :", progress)
         },
       })
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
