@@ -83,26 +83,7 @@
         </div>
       </template>
     </PVFileUpload>
-    <PVDialog :header="editingFile?.name" v-model:visible="showEditFileModal" modal>
-      <div class="flex">
-        <img :src="editingFile?.cdnUrl" alt="file" width="300" style="border-radius: 24px" />
-        <div class="flex flex-col gap-3 p-3">
-          <!-- Download -->
-          <PVButton label="Download" icon="pi pi-download" class="mt-3" @click="downloadFile" />
-          <!-- Copy link -->
-          <PVButton
-            :label="copiedLink ? 'Copied' : 'Copy link'"
-            :icon="copiedLink ? 'pi pi-check' : 'pi pi-link'"
-            class="mt-3"
-            @click="copyLink"
-          />
-        </div>
-      </div>
-      <p>{{ formatSize(editingFile?.size) }}</p>
-      <h3>Transformations</h3>
-      <h4>Smart scale crop</h4>
-      <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
-    </PVDialog>
+    <FileModal v-model:editingFile="editingFile" v-model:showEditFileModal="showEditFileModal" />
   </div>
 </template>
 
@@ -115,8 +96,9 @@ import ProgressBar from "primevue/progressbar"
 import "primevue/resources/themes/aura-light-green/theme.css"
 import "primeicons/primeicons.css"
 import { UploadClient } from "@uploadcare/upload-client"
-import { deleteFile } from "@uploadcare/rest-client"
 import Dialog from "primevue/dialog"
+import FileModal from "./FileModal.vue"
+import { formatSize } from "./composables"
 
 export default {
   beforeCreate() {
@@ -138,6 +120,9 @@ export default {
     this.$.appContext.app.component("PVProgressBar", ProgressBar)
     this.$.appContext.app.component("PVDialog", Dialog)
   },
+  components: {
+    FileModal,
+  },
   props: {
     content: { type: Object, required: true },
   },
@@ -155,30 +140,10 @@ export default {
       uploadProgressPercent: 0,
       editingFile: null,
       showEditFileModal: false,
-      copiedLink: false,
     }
   },
-  watch: {
-    editingFile: {
-      handler() {
-        this.showEditFileModal = !!this.editingFile
-      },
-      immediate: true,
-    },
-    showEditFileModal: {
-      handler() {
-        if (!this.showEditFileModal) {
-          this.editingFile = null
-        }
-      },
-    },
-  },
   methods: {
-    formatSize(size) {
-      if (size === 0) return "0 B"
-      const i = Math.floor(Math.log(size) / Math.log(1024))
-      return `${(size / Math.pow(1024, i)).toFixed(2) * 1} ${["B", "KB", "MB", "GB", "TB"][i]}`
-    },
+    formatSize,
     onRemoveTemplatingFile(file, index) {
       this.localFiles.splice(index, 1)
     },
@@ -208,34 +173,6 @@ export default {
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
       this.uploadedFiles.push(result)
       console.log("this.uploadedFiles :", this.uploadedFiles)
-    },
-    async downloadFile() {
-      const link = document.createElement("a")
-      link.href = this.editingFile.cdnUrl
-      link.download = this.editingFile.name
-      link.click()
-    },
-    async copyLink() {
-      try {
-        await navigator.clipboard.writeText(this.editingFile.cdnUrl)
-      } catch (error) {
-        console.error("Failed to copy: ", error)
-        // Try another way
-        let x = window.scrollX
-        let y = window.scrollY
-        const textArea = document.createElement("textarea")
-        textArea.value = this.editingFile.cdnUrl
-        document.body.appendChild(textArea)
-        textArea.focus()
-        textArea.select()
-        document.execCommand("copy")
-        document.body.removeChild(textArea)
-        window.scrollTo(x, y)
-      }
-      this.copiedLink = true
-      setTimeout(() => {
-        this.copiedLink = false
-      }, 2000)
     },
   },
   mounted() {
