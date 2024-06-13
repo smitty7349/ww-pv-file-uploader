@@ -64,7 +64,7 @@ export default {
       try {
         await navigator.clipboard.writeText(this.editingFile.cdnUrl)
       } catch (error) {
-        console.error("Failed to copy: ", error)
+        console.warn("Failed to copy: ", error)
         // Try another way
         let x = window.scrollX
         let y = window.scrollY
@@ -94,21 +94,30 @@ export default {
     @update:visible="emit('update:showEditFileModal', $event)"
     modal
   >
-    <div class="flex">
-      <img :src="editingFile?.cdnUrl" alt="file" width="300" style="border-radius: 24px" />
-      <div class="flex flex-col gap-3 p-3">
+    <div>
+      <div class="flex">
+        <img :src="editingFile?.cdnUrl" alt="file" style="border-radius: 24px; max-height: 300px" class="mx-auto" />
+      </div>
+      <div class="flex flex-col p-3 flex-grow">
         <!-- Download -->
-        <PVButton label="Download" icon="pi pi-download" class="mt-3" @click="downloadFile" />
-        <!-- Copy link -->
         <PVButton
-          :label="copiedLink ? 'Copied' : 'Copy link'"
-          :icon="copiedLink ? 'pi pi-check' : 'pi pi-link'"
-          class="mt-3"
-          @click="copyLink"
+          :label="`Download (${formatSize(editingFile?.size)})`"
+          icon="pi pi-download"
+          class="my-3"
+          @click="downloadFile"
         />
+        <div class="flex flex-col">
+          <PVInputText type="text" readonly :value="editingFile?.cdnUrl" class="w-full" />
+          <!-- Copy link -->
+          <PVButton
+            :label="copiedLink ? 'Copied' : 'Copy link'"
+            :icon="copiedLink ? 'pi pi-check' : 'pi pi-link'"
+            class="mt-3"
+            @click="copyLink"
+          />
+        </div>
       </div>
     </div>
-    <p>{{ formatSize(editingFile?.size) }}</p>
     <h3>Transformations</h3>
     <h4>
       <div class="flex items-center">

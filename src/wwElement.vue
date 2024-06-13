@@ -100,6 +100,7 @@ import Dialog from "primevue/dialog"
 import FileModal from "./FileModal.vue"
 import { formatSize } from "./composables"
 import InputSwitch from "primevue/inputswitch"
+import InputText from "primevue/inputtext"
 
 export default {
   beforeCreate() {
@@ -121,6 +122,7 @@ export default {
     this.$.appContext.app.component("PVProgressBar", ProgressBar)
     this.$.appContext.app.component("PVDialog", Dialog)
     this.$.appContext.app.component("PVInputSwitch", InputSwitch)
+    this.$.appContext.app.component("PVInputText", InputText)
   },
   components: {
     FileModal,
