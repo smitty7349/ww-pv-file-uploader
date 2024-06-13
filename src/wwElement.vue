@@ -47,7 +47,7 @@
               class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
             >
               <div>
-                <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" height="50" />
+                <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" />
               </div>
               <span class="font-semibold">{{ file.name }}</span>
               <div>{{ formatSize(file.size) }}</div>
@@ -66,7 +66,7 @@
               class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
             >
               <div @click="editingFile = file">
-                <img role="presentation" :alt="file.name" :src="file.cdnUrl" width="100" height="50" />
+                <img role="presentation" :alt="file.name" :src="file.cdnUrl" width="100" />
               </div>
               <span class="font-semibold">{{ file.name }}</span>
               <div>{{ formatSize(file.size) }}</div>
@@ -84,8 +84,24 @@
       </template>
     </PVFileUpload>
     <PVDialog :header="editingFile?.name" v-model:visible="showEditFileModal" modal>
-      <img :src="editingFile?.cdnUrl" alt="file" />
+      <div class="flex">
+        <img :src="editingFile?.cdnUrl" alt="file" width="300" style="border-radius: 24px" />
+        <div class="flex flex-col gap-3 p-3">
+          <!-- Download -->
+          <PVButton label="Download" icon="pi pi-download" class="mt-3" @click="downloadFile" />
+          <!-- Copy link -->
+          <PVButton
+            :label="copiedLink ? 'Copied' : 'Copy link'"
+            :icon="copiedLink ? 'pi pi-check' : 'pi pi-link'"
+            class="mt-3"
+            @click="copyLink"
+          />
+        </div>
+      </div>
       <p>{{ formatSize(editingFile?.size) }}</p>
+      <h3>Transformations</h3>
+      <h4>Smart scale crop</h4>
+      <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
     </PVDialog>
   </div>
 </template>
@@ -139,6 +155,7 @@ export default {
       uploadProgressPercent: 0,
       editingFile: null,
       showEditFileModal: false,
+      copiedLink: false,
     }
   },
   watch: {
@@ -191,6 +208,34 @@ export default {
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
       this.uploadedFiles.push(result)
       console.log("this.uploadedFiles :", this.uploadedFiles)
+    },
+    async downloadFile() {
+      const link = document.createElement("a")
+      link.href = this.editingFile.cdnUrl
+      link.download = this.editingFile.name
+      link.click()
+    },
+    async copyLink() {
+      try {
+        await navigator.clipboard.writeText(this.editingFile.cdnUrl)
+      } catch (error) {
+        console.error("Failed to copy: ", error)
+        // Try another way
+        let x = window.scrollX
+        let y = window.scrollY
+        const textArea = document.createElement("textarea")
+        textArea.value = this.editingFile.cdnUrl
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        document.execCommand("copy")
+        document.body.removeChild(textArea)
+        window.scrollTo(x, y)
+      }
+      this.copiedLink = true
+      setTimeout(() => {
+        this.copiedLink = false
+      }, 2000)
     },
   },
   mounted() {
