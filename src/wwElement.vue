@@ -83,7 +83,10 @@
         </div>
       </template>
     </PVFileUpload>
-    <PVDialog header="Header" :visible="editingFile !== null" :style="{ width: '25rem' }"> Hi there </PVDialog>
+    <PVDialog :header="editingFile?.name" v-model:visible="showEditFileModal" modal>
+      <img :src="editingFile?.cdnUrl" alt="file" />
+      <p>{{ formatSize(editingFile?.size) }}</p>
+    </PVDialog>
   </div>
 </template>
 
@@ -135,7 +138,23 @@ export default {
       uploadedFiles: [],
       uploadProgressPercent: 0,
       editingFile: null,
+      showEditFileModal: false,
     }
+  },
+  watch: {
+    editingFile: {
+      handler() {
+        this.showEditFileModal = !!this.editingFile
+      },
+      immediate: true,
+    },
+    showEditFileModal: {
+      handler() {
+        if (!this.showEditFileModal) {
+          this.editingFile = null
+        }
+      },
+    },
   },
   methods: {
     formatSize(size) {
