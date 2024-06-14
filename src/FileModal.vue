@@ -25,6 +25,7 @@ export default {
       watermarkUuid: "",
       watermarkOpacity: 30,
       enableAutoFormat: false,
+      enableAutoQuality: false,
     }
   },
 
@@ -97,6 +98,19 @@ export default {
         else url += "-/format/auto/"
       } else {
         url = url.replace(/-\/format\/auto\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    enableAutoQuality() {
+      let url = this.editingFile.cdnUrl
+      if (this.enableAutoQuality) {
+        if (url.includes("-/quality/smart/")) url = url.replace(/-\/quality\/smart\//, "")
+        else url += "-/quality/smart/"
+      } else {
+        url = url.replace(/-\/quality\/smart\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -197,7 +211,7 @@ export default {
         </div>
       </h4>
       <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
-      <p>
+      <p class="mt-3">
         <span>Dimensions: </span>
         <span>
           <PVInputText type="number" v-model="scaleCropDimensionsX" size="small" />
@@ -244,6 +258,17 @@ export default {
         </div>
       </h4>
       <p>Automatically convert the image to the right format for whatever device it will be viewed on.</p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableAutoQuality" />
+          <span class="ml-3">Auto quality</span>
+        </div>
+      </h4>
+      <p>
+        Automatically adjust the quality of the image to achieve the best visual quality and the smallest file size.
+      </p>
     </div>
   </PVDialog>
 </template>
