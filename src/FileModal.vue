@@ -27,6 +27,9 @@ export default {
       enableAutoFormat: false,
       enableAutoQuality: false,
       enableAutoProfilePicture: false,
+      enablePreview: false,
+      previewDimensionsX: 100,
+      previewDimensionsY: 100,
     }
   },
 
@@ -54,6 +57,9 @@ export default {
     },
     watermarkData() {
       return this.enableWatermark ? `-/overlay/${this.watermarkUuid}/30px40p/90p,10p/${this.watermarkOpacity}p/` : ""
+    },
+    previewDimensions() {
+      return this.enablePreview ? `${this.previewDimensionsX}x${this.previewDimensionsY}` : ""
     },
   },
 
@@ -127,6 +133,20 @@ export default {
         else url += presetString
       } else {
         url = url.replace(presetRegex, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    previewDimensions() {
+      let url = this.editingFile.cdnUrl
+      if (this.enablePreview) {
+        if (url.includes("-/preview/"))
+          url = url.replace(/-\/preview\/\d{1,5}x\d{1,5}\//, "-/preview/" + this.previewDimensions + "/")
+        else url += "-/preview/" + this.previewDimensions + "/"
+      } else {
+        url = url.replace(/-\/preview\/\d{1,5}x\d{1,5}\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -294,6 +314,25 @@ export default {
         </div>
       </h4>
       <p>Automatically crop the image to a square, centering the face, and resizing it to 200x200 pixels.</p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enablePreview" />
+          <span class="ml-3">Preview</span>
+        </div>
+      </h4>
+      <p>Downscale the image for preview purposes.</p>
+      <p class="mt-3">
+        <span>Dimensions: </span>
+        <span>
+          <PVInputText type="number" v-model="previewDimensionsX" size="small" />
+        </span>
+        <span>x</span>
+        <span>
+          <PVInputText type="number" v-model="previewDimensionsY" size="small" />
+        </span>
+      </p>
     </div>
   </PVDialog>
 </template>
