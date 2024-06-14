@@ -26,6 +26,7 @@ export default {
       watermarkOpacity: 30,
       enableAutoFormat: false,
       enableAutoQuality: false,
+      enableAutoProfilePicture: false,
     }
   },
 
@@ -111,6 +112,21 @@ export default {
         else url += "-/quality/smart/"
       } else {
         url = url.replace(/-\/quality\/smart\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    enableAutoProfilePicture() {
+      let presetString = "-/crop/face/200px200p/-/scale_crop/550x550/center/"
+      let presetRegex = /-\/crop\/face\/200px200p\/-\/scale_crop\/550x550\/center\//
+      let url = this.editingFile.cdnUrl
+      if (this.enableAutoProfilePicture) {
+        if (url.includes(presetString)) url = url.replace(presetRegex, "")
+        else url += presetString
+      } else {
+        url = url.replace(presetRegex, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -269,6 +285,15 @@ export default {
       <p>
         Automatically adjust the quality of the image to achieve the best visual quality and the smallest file size.
       </p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableAutoProfilePicture" />
+          <span class="ml-3">Auto profile picture</span>
+        </div>
+      </h4>
+      <p>Automatically crop the image to a square, centering the face, and resizing it to 200x200 pixels.</p>
     </div>
   </PVDialog>
 </template>
