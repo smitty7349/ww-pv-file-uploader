@@ -24,6 +24,7 @@ export default {
       enableWatermark: false,
       watermarkUuid: "",
       watermarkOpacity: 30,
+      enableAutoFormat: false,
     }
   },
 
@@ -83,6 +84,19 @@ export default {
         else url += this.watermarkData
       } else {
         url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/\d{1,3}p\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    enableAutoFormat() {
+      let url = this.editingFile.cdnUrl
+      if (this.enableAutoFormat) {
+        if (url.includes("-/format/auto/")) url = url.replace(/-\/format\/auto\//, "")
+        else url += "-/format/auto/"
+      } else {
+        url = url.replace(/-\/format\/auto\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -221,6 +235,15 @@ export default {
           <PVInputText type="number" v-model="watermarkOpacity" :min="0" :max="100" style="width: 150px" size="small" />
         </span>
       </p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableAutoFormat" />
+          <span class="ml-3">Auto format</span>
+        </div>
+      </h4>
+      <p>Automatically convert the image to the right format for whatever device it will be viewed on.</p>
     </div>
   </PVDialog>
 </template>
