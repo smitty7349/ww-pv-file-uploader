@@ -21,6 +21,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 - basic watermark transformation, Uploadcare only (no Weweb integration)
   - with opacity
 - basic auto format transformation, Uploadcare only (no Weweb integration)
+- basic quality transformation, Uploadcare only (no Weweb integration)
 
 ### 0.0.4
 
