@@ -20,6 +20,7 @@ export default {
       copiedLink: false,
       scaleCropDimensionsX: 500,
       scaleCropDimensionsY: 500,
+      rotateDegrees: 0,
     }
   },
 
@@ -35,12 +36,12 @@ export default {
         if (value) {
           this.$emit("update:editingFile", {
             ...this.editingFile,
-            cdnUrl: this.editingFile.cdnUrl + `-/scale_crop/${this.smartScaleCropDimensions}/smart`,
+            cdnUrl: this.editingFile.cdnUrl + `-/scale_crop/${this.smartScaleCropDimensions}/smart/`,
           })
         } else {
           this.$emit("update:editingFile", {
             ...this.editingFile,
-            cdnUrl: this.editingFile.cdnUrl.replace(`-/scale_crop/${this.smartScaleCropDimensions}/smart`, ""),
+            cdnUrl: this.editingFile.cdnUrl.replace(`-/scale_crop/${this.smartScaleCropDimensions}/smart/`, ""),
           })
         }
       },
@@ -70,6 +71,24 @@ export default {
   },
 
   methods: {
+    async rotateImage() {
+      let url = this.editingFile.cdnUrl
+      let newDegrees = this.rotateDegrees - 90
+      if (newDegrees < 0) newDegrees = 270
+      if (newDegrees) {
+        let newRotationString = `-/rotate/${newDegrees}/`
+        if (url.includes("-/rotate/")) url = url.replace(/-\/rotate\/\d+\//, newRotationString)
+        else url += newRotationString
+      } else {
+        url = url.replace(/-\/rotate\/\d+\//, "")
+      }
+      this.rotateDegrees = newDegrees
+
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
     async downloadFile() {
       const link = document.createElement("a")
       link.href = this.editingFile.cdnUrl
@@ -135,23 +154,31 @@ export default {
       </div>
     </div>
     <h3>Transformations</h3>
-    <h4>
-      <div class="flex items-center">
-        <PVInputSwitch v-model="smartScaleCrop" />
-        <span class="ml-3">Smart scale crop</span>
-      </div>
-    </h4>
-    <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
-    <p>
-      <span>Dimensions: </span>
-      <span>
-        <PVInputText type="number" v-model="scaleCropDimensionsX" size="small" />
-      </span>
-      <span>x</span>
-      <span>
-        <PVInputText type="number" v-model="scaleCropDimensionsY" size="small" />
-      </span>
-    </p>
-    <div></div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="smartScaleCrop" />
+          <span class="ml-3">Smart scale crop</span>
+        </div>
+      </h4>
+      <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
+      <p>
+        <span>Dimensions: </span>
+        <span>
+          <PVInputText type="number" v-model="scaleCropDimensionsX" size="small" />
+        </span>
+        <span>x</span>
+        <span>
+          <PVInputText type="number" v-model="scaleCropDimensionsY" size="small" />
+        </span>
+      </p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVButton label="Rotate" icon="pi pi-refresh" @click="rotateImage" />
+        </div>
+      </h4>
+    </div>
   </PVDialog>
 </template>

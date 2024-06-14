@@ -18,8 +18,9 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ### 0.0.4
 
-- smart scale crop transformation, Uploadcare only (no Weweb integration)
 - show the link
+- smart scale crop transformation, Uploadcare only (no Weweb integration)
+- basic rotation transformation, Uploadcare only (no Weweb integration)
 
 ### 0.0.3
 
