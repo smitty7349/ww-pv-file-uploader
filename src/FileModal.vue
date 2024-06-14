@@ -18,24 +18,29 @@ export default {
   data() {
     return {
       copiedLink: false,
+      scaleCropDimensionsX: 500,
+      scaleCropDimensionsY: 500,
     }
   },
 
   computed: {
+    smartScaleCropDimensions() {
+      return `${this.scaleCropDimensionsX}x${this.scaleCropDimensionsY}`
+    },
     smartScaleCrop: {
       get() {
-        return this.editingFile?.cdnUrl.includes("-/scale_crop/500x500/smart")
+        return !!this.editingFile?.cdnUrl.match(/-\/scale_crop\/.*x.*\/smart/)
       },
       set(value) {
         if (value) {
           this.$emit("update:editingFile", {
             ...this.editingFile,
-            cdnUrl: this.editingFile.cdnUrl + "-/scale_crop/500x500/smart",
+            cdnUrl: this.editingFile.cdnUrl + `-/scale_crop/${this.smartScaleCropDimensions}/smart`,
           })
         } else {
           this.$emit("update:editingFile", {
             ...this.editingFile,
-            cdnUrl: this.editingFile.cdnUrl.replace("-/scale_crop/500x500/smart", ""),
+            cdnUrl: this.editingFile.cdnUrl.replace(`-/scale_crop/${this.smartScaleCropDimensions}/smart`, ""),
           })
         }
       },
@@ -49,6 +54,17 @@ export default {
     showEditFileModal() {
       if (!this.showEditFileModal) {
         this.$emit("update:editingFile", null)
+      }
+    },
+    smartScaleCropDimensions() {
+      if (this.smartScaleCrop) {
+        this.$emit("update:editingFile", {
+          ...this.editingFile,
+          cdnUrl: this.editingFile.cdnUrl.replace(
+            /-\/scale_crop\/.*x.*\/smart/,
+            `-/scale_crop/${this.smartScaleCropDimensions}/smart`
+          ),
+        })
       }
     },
   },
@@ -126,6 +142,16 @@ export default {
       </div>
     </h4>
     <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
+    <p>
+      <span>Dimensions: </span>
+      <span>
+        <PVInputText type="number" v-model="scaleCropDimensionsX" size="small" />
+      </span>
+      <span>x</span>
+      <span>
+        <PVInputText type="number" v-model="scaleCropDimensionsY" size="small" />
+      </span>
+    </p>
     <div></div>
   </PVDialog>
 </template>
