@@ -23,6 +23,7 @@ export default {
       rotateDegrees: 0,
       enableWatermark: false,
       watermarkUuid: "",
+      watermarkOpacity: 30,
     }
   },
 
@@ -49,7 +50,7 @@ export default {
       },
     },
     watermarkData() {
-      return this.enableWatermark ? `-/overlay/${this.watermarkUuid}/30px40p/90p,10p/20p/` : ""
+      return this.enableWatermark ? `-/overlay/${this.watermarkUuid}/30px40p/90p,10p/${this.watermarkOpacity}p/` : ""
     },
   },
 
@@ -77,10 +78,11 @@ export default {
       if (!this.watermarkUuid) return
       let url = this.editingFile.cdnUrl
       if (this.enableWatermark) {
-        if (url.includes("-/overlay/")) url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/20p\//, this.watermarkData)
+        if (url.includes("-/overlay/"))
+          url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/\d{1,3}p\//, this.watermarkData)
         else url += this.watermarkData
       } else {
-        url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/20p\//, "")
+        url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/\d{1,3}p\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -207,10 +209,16 @@ export default {
         </div>
       </h4>
       <p>Apply a watermark to the image, using another image's UUID</p>
-      <p>
+      <p class="mt-3">
         <span>Watermark UUID: </span>
         <span>
           <PVInputText type="text" v-model="watermarkUuid" size="small" />
+        </span>
+      </p>
+      <p class="flex items-center mt-3">
+        <span>Opacity: </span>
+        <span class="ml-3">
+          <PVInputText type="number" v-model="watermarkOpacity" :min="0" :max="100" style="width: 150px" size="small" />
         </span>
       </p>
     </div>
