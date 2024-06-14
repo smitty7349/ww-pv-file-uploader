@@ -21,6 +21,8 @@ export default {
       scaleCropDimensionsX: 500,
       scaleCropDimensionsY: 500,
       rotateDegrees: 0,
+      enableWatermark: false,
+      watermarkUuid: "",
     }
   },
 
@@ -46,6 +48,9 @@ export default {
         }
       },
     },
+    watermarkData() {
+      return this.enableWatermark ? `-/overlay/${this.watermarkUuid}/30px40p/90p,10p/20p/` : ""
+    },
   },
 
   watch: {
@@ -67,6 +72,20 @@ export default {
           ),
         })
       }
+    },
+    watermarkData() {
+      if (!this.watermarkUuid) return
+      let url = this.editingFile.cdnUrl
+      if (this.enableWatermark) {
+        if (url.includes("-/overlay/")) url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/20p\//, this.watermarkData)
+        else url += this.watermarkData
+      } else {
+        url = url.replace(/-\/overlay\/.*\/30px40p\/90p,10p\/20p\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
     },
   },
 
@@ -142,7 +161,7 @@ export default {
           @click="downloadFile"
         />
         <div class="flex flex-col">
-          <PVInputText type="text" readonly :value="editingFile?.cdnUrl" class="w-full" />
+          <PVInputText type="text" v-if="editingFile" v-model="editingFile.cdnUrl" class="w-full" />
           <!-- Copy link -->
           <PVButton
             :label="copiedLink ? 'Copied' : 'Copy link'"
@@ -179,6 +198,21 @@ export default {
           <PVButton label="Rotate" icon="pi pi-refresh" @click="rotateImage" />
         </div>
       </h4>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableWatermark" />
+          <span class="ml-3">Watermark</span>
+        </div>
+      </h4>
+      <p>Apply a watermark to the image, using another image's UUID</p>
+      <p>
+        <span>Watermark UUID: </span>
+        <span>
+          <PVInputText type="text" v-model="watermarkUuid" size="small" />
+        </span>
+      </p>
     </div>
   </PVDialog>
 </template>
