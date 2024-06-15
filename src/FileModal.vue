@@ -30,6 +30,7 @@ export default {
       enablePreview: false,
       previewDimensionsX: 100,
       previewDimensionsY: 100,
+      enableGrayscale: false,
     }
   },
 
@@ -147,6 +148,18 @@ export default {
         else url += "-/preview/" + this.previewDimensions + "/"
       } else {
         url = url.replace(/-\/preview\/\d{1,5}x\d{1,5}\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    enableGrayscale() {
+      let url = this.editingFile.cdnUrl
+      if (this.enableGrayscale) {
+        if (!url.includes("-/grayscale/")) url += "-/grayscale/"
+      } else {
+        url = url.replace(/-\/grayscale\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -333,6 +346,15 @@ export default {
           <PVInputText type="number" v-model="previewDimensionsY" size="small" />
         </span>
       </p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableGrayscale" />
+          <span class="ml-3">Grayscale</span>
+        </div>
+      </h4>
+      <p>Convert the image to grayscale.</p>
     </div>
   </PVDialog>
 </template>

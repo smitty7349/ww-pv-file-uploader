@@ -16,6 +16,10 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
+### 0.0.6
+
+- grayscale transformation, Uploadcare only (no Weweb integration)
+
 ### 0.0.5
 
 - basic watermark transformation, Uploadcare only (no Weweb integration)
