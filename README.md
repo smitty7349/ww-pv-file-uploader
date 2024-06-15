@@ -16,6 +16,11 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
+### 0.0.7
+
+- all features from 0.0.6 can be disabled/enabled in Weweb
+- fix bug stopping the dialog from closing
+
 ### 0.0.6 - First round of transformations, Uploadcare only (no Weweb integration), text overlay missing
 
 - grayscale transformation, Uploadcare only (no Weweb integration)
@@ -65,16 +70,16 @@ Initial release
 
 - The capabilities can be enabled/disabled in Weweb:
 
-  - [ ] scale_crop with smart
-  - [ ] rotate
-  - [ ] watermark
-  - [ ] format
-  - [ ] quality
-  - [ ] profile picture preset
-  - [ ] preview
-  - [ ] grayscale
-  - [ ] smart resize
+  - [x] scale_crop with smart
+  - [x] rotate
+  - [x] watermark
+  - [x] format
+  - [x] quality
+  - [x] profile picture preset
+  - [x] preview
+  - [x] grayscale
+  - [x] smart resize
   - [ ] ~~overlay (text and image only)~~
-  - [ ] blur
+  - [x] blur
 
 - Emits an array of `{ uuid (str), cdnURL, size (# decimal), fileName (str), moderationCheck (bool) }` for each image
