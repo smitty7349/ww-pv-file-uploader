@@ -49,25 +49,31 @@ Initial release
 
 ## Requirements
 
-OH! I see now...okay. I see why you were asking about displaying the image...for some reason I thought we got the original uploadcare uploader to work.
+- Has these capabilities, in the UI:
 
-I don't see a difference in either of the images...but it could just be me.
+  - [x] scale_crop with smart (they can enter the dimensions)
+  - [x] rotate
+  - [x] watermark (they can enter another UUID)
+  - [x] format
+  - [x] quality
+  - [x] profile picture preset
+  - [x] preview (on everything - I will need to research this more and also ask what you mean 😅)
+  - [x] grayscale
+  - [x] smart resize
+  - [x] overlay (text and image only)
+  - [x] blur
 
-https://uploadcare.com/docs/transformations/image/#:~:text=With%20Uploadcare%2C%20you%20can%20easily,that'll%20unify%20their%20look.
+- The capabilities can be enabled/disabled in Weweb:
+  - [ ] scale_crop with smart (they can enter the dimensions)
+  - [ ] rotate
+  - [ ] watermark (they can enter another UUID)
+  - [ ] format
+  - [ ] quality
+  - [ ] profile picture preset
+  - [ ] preview (on everything - I will need to research this more and also ask what you mean 😅)
+  - [ ] grayscale
+  - [ ] smart resize
+  - [ ] overlay (text and image only)
+  - [ ] blur
 
-Your list is a good start:
-
-- scale_crop with smart (they can enter the dimensions)
-- rotate
-- watermark (they can enter another UUID)
-- format
-- quality
-- profile picture preset
-- preview (on everything - I will need to research this more and also ask what you mean 😅)
-
-I'm adding:
-
-- grayscale
-- smart resize
-- overlay (text and image only)
-- blur
+Emits { uuid (str), cdnURL, size (# decimal), fileName (str), moderationCheck (bool) }
