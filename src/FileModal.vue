@@ -34,6 +34,11 @@ export default {
       enableSmartResize: false,
       smartResizeDimensionsX: 500,
       smartResizeDimensionsY: 500,
+      enableOverlayText: false,
+      overlayText: "",
+      overlayTextOpacity: 30,
+      enableBlur: false,
+      blurRadius: 5,
     }
   },
 
@@ -67,6 +72,14 @@ export default {
     },
     smartResizeDimensions() {
       return this.enableSmartResize ? `${this.smartResizeDimensionsX}x${this.smartResizeDimensionsY}` : ""
+    },
+    overlayTextData() {
+      return this.enableOverlayText
+        ? `-/overlay_text/${this.overlayText}/30px40p/90p,10p/${this.overlayTextOpacity}p/`
+        : ""
+    },
+    blurData() {
+      return this.enableBlur ? `-/blur/${this.blurRadius}/` : ""
     },
   },
 
@@ -179,6 +192,19 @@ export default {
         url += "-/smart_resize/" + this.smartResizeDimensions + "/"
       } else {
         url = url.replace(/-\/smart_resize\/\d{1,5}x\d{1,5}\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    blurData() {
+      let url = this.editingFile.cdnUrl
+      if (this.enableBlur) {
+        if (url.includes("-/blur/")) url = url.replace(/-\/blur\/\d{1,2}\//, "")
+        url += this.blurData
+      } else {
+        url = url.replace(/-\/blur\/\d{1,2}\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -391,6 +417,21 @@ export default {
         <span>x</span>
         <span>
           <PVInputText type="number" v-model="smartResizeDimensionsY" size="small" />
+        </span>
+      </p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableBlur" />
+          <span class="ml-3">Blur</span>
+        </div>
+      </h4>
+      <p>Blur the image.</p>
+      <p class="mt-3">
+        <span>Radius: </span>
+        <span>
+          <PVInputText type="number" v-model="blurRadius" :min="0" :max="100" size="small" />
         </span>
       </p>
     </div>
