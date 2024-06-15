@@ -285,7 +285,7 @@ export default {
   <PVDialog
     :header="editingFile?.name"
     :visible="showEditFileModal"
-    @update:visible="emit('update:showEditFileModal', $event)"
+    @update:visible="$emit('update:showEditFileModal', $event)"
     modal
   >
     <div>
