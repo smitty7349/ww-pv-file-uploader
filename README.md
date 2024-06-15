@@ -57,23 +57,24 @@ Initial release
   - [x] format
   - [x] quality
   - [x] profile picture preset
-  - [x] preview (on everything - I will need to research this more and also ask what you mean 😅)
+  - [x] preview
   - [x] grayscale
   - [x] smart resize
-  - [x] overlay (text and image only)
+  - [ ] ~~overlay (text and image only)~~
   - [x] blur
 
 - The capabilities can be enabled/disabled in Weweb:
-  - [ ] scale_crop with smart (they can enter the dimensions)
+
+  - [ ] scale_crop with smart
   - [ ] rotate
-  - [ ] watermark (they can enter another UUID)
+  - [ ] watermark
   - [ ] format
   - [ ] quality
   - [ ] profile picture preset
-  - [ ] preview (on everything - I will need to research this more and also ask what you mean 😅)
+  - [ ] preview
   - [ ] grayscale
   - [ ] smart resize
-  - [ ] overlay (text and image only)
+  - [ ] ~~overlay (text and image only)~~
   - [ ] blur
 
-Emits { uuid (str), cdnURL, size (# decimal), fileName (str), moderationCheck (bool) }
+- Emits an array of `{ uuid (str), cdnURL, size (# decimal), fileName (str), moderationCheck (bool) }` for each image

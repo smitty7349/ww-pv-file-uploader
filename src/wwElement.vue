@@ -83,7 +83,7 @@
         </div>
       </template>
     </PVFileUpload>
-    <FileModal v-model:editingFile="editingFile" v-model:showEditFileModal="showEditFileModal" />
+    <FileModal v-model:editingFile="editingFile" v-model:showEditFileModal="showEditFileModal" :content="content" />
   </div>
 </template>
 

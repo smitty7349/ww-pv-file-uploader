@@ -3,6 +3,7 @@ import { formatSize } from "./composables"
 
 export default {
   props: {
+    content: { type: Object, required: true },
     editingFile: {
       type: Object,
       default: null,
@@ -43,6 +44,21 @@ export default {
   },
 
   computed: {
+    anyTransformationsEnabled() {
+      return (
+        this.content.enableScaleCrop ||
+        this.content.enableRotate ||
+        this.content.enableWatermark ||
+        this.content.enableAutoFormat ||
+        this.content.enableAutoQuality ||
+        this.content.enableAutoProfilePicture ||
+        this.content.enablePreview ||
+        this.content.enableGrayscale ||
+        this.content.enableSmartResize ||
+        this.content.enableOverlayText ||
+        this.content.enableBlur
+      )
+    },
     smartScaleCropDimensions() {
       return `${this.scaleCropDimensionsX}x${this.scaleCropDimensionsY}`
     },
@@ -296,8 +312,8 @@ export default {
         </div>
       </div>
     </div>
-    <h3>Transformations</h3>
-    <div>
+    <h3 v-if="anyTransformationsEnabled">Transformations</h3>
+    <div v-if="content.enableScaleCrop">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="smartScaleCrop" />
@@ -316,14 +332,14 @@ export default {
         </span>
       </p>
     </div>
-    <div>
+    <div v-if="content.enableRotate">
       <h4>
         <div class="flex items-center">
           <PVButton label="Rotate" icon="pi pi-refresh" @click="rotateImage" />
         </div>
       </h4>
     </div>
-    <div>
+    <div v-if="content.enableWatermark">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableWatermark" />
@@ -344,7 +360,7 @@ export default {
         </span>
       </p>
     </div>
-    <div>
+    <div v-if="content.enableAutoFormat">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableAutoFormat" />
@@ -353,7 +369,7 @@ export default {
       </h4>
       <p>Automatically convert the image to the right format for whatever device it will be viewed on.</p>
     </div>
-    <div>
+    <div v-if="content.enableAutoQuality">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableAutoQuality" />
@@ -364,7 +380,7 @@ export default {
         Automatically adjust the quality of the image to achieve the best visual quality and the smallest file size.
       </p>
     </div>
-    <div>
+    <div v-if="content.enableAutoProfilePicture">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableAutoProfilePicture" />
@@ -373,7 +389,7 @@ export default {
       </h4>
       <p>Automatically crop the image to a square, centering the face, and resizing it to 200x200 pixels.</p>
     </div>
-    <div>
+    <div v-if="content.enablePreview">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enablePreview" />
@@ -392,7 +408,7 @@ export default {
         </span>
       </p>
     </div>
-    <div>
+    <div v-if="content.enableGrayscale">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableGrayscale" />
@@ -401,7 +417,7 @@ export default {
       </h4>
       <p>Convert the image to grayscale.</p>
     </div>
-    <div>
+    <div v-if="content.enableSmartResize">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableSmartResize" />
@@ -420,7 +436,7 @@ export default {
         </span>
       </p>
     </div>
-    <div>
+    <div v-if="content.enableBlur">
       <h4>
         <div class="flex items-center">
           <PVInputSwitch v-model="enableBlur" />
