@@ -31,6 +31,9 @@ export default {
       previewDimensionsX: 100,
       previewDimensionsY: 100,
       enableGrayscale: false,
+      enableSmartResize: false,
+      smartResizeDimensionsX: 500,
+      smartResizeDimensionsY: 500,
     }
   },
 
@@ -61,6 +64,9 @@ export default {
     },
     previewDimensions() {
       return this.enablePreview ? `${this.previewDimensionsX}x${this.previewDimensionsY}` : ""
+    },
+    smartResizeDimensions() {
+      return this.enableSmartResize ? `${this.smartResizeDimensionsX}x${this.smartResizeDimensionsY}` : ""
     },
   },
 
@@ -160,6 +166,19 @@ export default {
         if (!url.includes("-/grayscale/")) url += "-/grayscale/"
       } else {
         url = url.replace(/-\/grayscale\//, "")
+      }
+      this.$emit("update:editingFile", {
+        ...this.editingFile,
+        cdnUrl: url,
+      })
+    },
+    smartResizeDimensions() {
+      let url = this.editingFile.cdnUrl
+      if (this.enableSmartResize) {
+        if (url.includes("-/smart_resize/")) url = url.replace(/-\/smart_resize\/\d{1,5}x\d{1,5}\//, "")
+        url += "-/smart_resize/" + this.smartResizeDimensions + "/"
+      } else {
+        url = url.replace(/-\/smart_resize\/\d{1,5}x\d{1,5}\//, "")
       }
       this.$emit("update:editingFile", {
         ...this.editingFile,
@@ -355,6 +374,25 @@ export default {
         </div>
       </h4>
       <p>Convert the image to grayscale.</p>
+    </div>
+    <div>
+      <h4>
+        <div class="flex items-center">
+          <PVInputSwitch v-model="enableSmartResize" />
+          <span class="ml-3">Smart resize</span>
+        </div>
+      </h4>
+      <p>Keep proportions, but fill the specified dimensions, by generating what's missing.</p>
+      <p class="mt-3">
+        <span>Dimensions: </span>
+        <span>
+          <PVInputText type="number" v-model="smartResizeDimensionsX" size="small" />
+        </span>
+        <span>x</span>
+        <span>
+          <PVInputText type="number" v-model="smartResizeDimensionsY" size="small" />
+        </span>
+      </p>
     </div>
   </PVDialog>
 </template>
