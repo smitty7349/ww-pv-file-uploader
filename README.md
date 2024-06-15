@@ -20,6 +20,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 - grayscale transformation, Uploadcare only (no Weweb integration)
 - smart resize transformation, Uploadcare only (no Weweb integration)
+- blur transformation, Uploadcare only (no Weweb integration)
 
 ### 0.0.5
 
