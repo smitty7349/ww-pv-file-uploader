@@ -16,7 +16,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
-### 0.0.6
+### 0.0.6 - First round of transformations, Uploadcare only (no Weweb integration), text overlay missing
 
 - grayscale transformation, Uploadcare only (no Weweb integration)
 - smart resize transformation, Uploadcare only (no Weweb integration)
