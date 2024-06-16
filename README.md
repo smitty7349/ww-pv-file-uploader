@@ -20,6 +20,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 - all features from 0.0.6 can be disabled/enabled in Weweb
 - fix bug stopping the dialog from closing
+- emit single-object event for each image
 
 ### 0.0.6 - First round of transformations, Uploadcare only (no Weweb integration), text overlay missing
 
@@ -83,3 +84,4 @@ Initial release
   - [x] blur
 
 - Emits an array of `{ uuid (str), cdnURL, size (# decimal), fileName (str), moderationCheck (bool) }` for each image
+  - [x] single object event for each image
