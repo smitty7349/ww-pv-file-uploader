@@ -146,6 +146,29 @@ export default {
       showEditFileModal: false,
     }
   },
+
+  watch: {
+    editingFile(newVal, oldVal) {
+      if (!newVal) return
+      if (oldVal && newVal)
+        this.$emit("trigger-event", {
+          name: "update:editing-file",
+          event: {
+            ...newVal,
+            fileName: newVal.name,
+          },
+        })
+      // this.$emit("update:content", { ...this.content, uplaodedFiles: this.uploadedFiles })
+      this.uploadedFiles = this.uploadedFiles.map((file) => {
+        if (file && file.uuid === newVal.uuid) {
+          return newVal
+        }
+        return file
+      })
+      this.$emit("update:content", { ...this.content, uploadedFiles: this.uploadedFiles })
+    },
+  },
+
   methods: {
     formatSize,
     onRemoveTemplatingFile(file, index) {

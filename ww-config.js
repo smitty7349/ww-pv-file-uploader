@@ -4,6 +4,20 @@ export default {
       en: "PrimeVue Uploadcare",
     },
   },
+  triggerEvents: [
+    {
+      name: "update:editing-file",
+      label: {
+        en: "Update to a currently-editing file",
+      },
+      event: {
+        cdnUrl: "",
+        fileName: "",
+        size: 0,
+        uuid: "",
+      },
+    },
+  ],
   properties: {
     publicKey: {
       label: {
