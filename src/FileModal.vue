@@ -1,4 +1,5 @@
 <script>
+import Dialog from "primevue/dialog"
 import { formatSize } from "./composables"
 
 export default {
@@ -282,12 +283,18 @@ export default {
 </script>
 
 <template>
-  <PVDialog
+  <Component
+    :is="content.style === 'inline' ? 'div' : Dialog"
     :header="editingFile?.name"
     :visible="showEditFileModal"
     @update:visible="$emit('update:showEditFileModal', $event)"
     modal
+    :style="content.style === 'inline' ? { display: showEditFileModal ? 'block' : 'none' } : {}"
   >
+    <div v-if="content.style === 'inline'" class="flex justify-between">
+      <h2>{{ editingFile?.name }}</h2>
+      <PVButton label="Close" @click="$emit('update:showEditFileModal', false)" />
+    </div>
     <div>
       <div class="flex">
         <img :src="editingFile?.cdnUrl" alt="file" style="border-radius: 24px; max-height: 300px" class="mx-auto" />
@@ -451,5 +458,5 @@ export default {
         </span>
       </p>
     </div>
-  </PVDialog>
+  </Component>
 </template>

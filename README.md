@@ -16,6 +16,16 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
+### 0.0.8
+
+- it has three style modes: basic, inline, minimal
+  - it has them in the editor UI
+  - it responds to them
+  - basic: the default, with the file picker and the file modal
+  - inline: the file modal shows below the file picker
+  - minimal: no file modal, only the file picker
+- it has uploadedFiles bound as an array
+
 ### 0.0.7
 
 - all features from 0.0.6 can be disabled/enabled in Weweb

@@ -75,6 +75,13 @@
             </div>
           </div>
         </div>
+
+        <FileModal
+          v-if="content.style !== 'minimal'"
+          v-model:editingFile="editingFile"
+          v-model:showEditFileModal="showEditFileModal"
+          :content="content"
+        />
       </template>
       <template #empty>
         <div class="flex items-center justify-center flex-col" :class="{ 'pointer-events-none': !content.publicKey }">
@@ -83,7 +90,6 @@
         </div>
       </template>
     </PVFileUpload>
-    <FileModal v-model:editingFile="editingFile" v-model:showEditFileModal="showEditFileModal" :content="content" />
   </div>
 </template>
 
