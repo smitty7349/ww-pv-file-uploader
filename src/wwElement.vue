@@ -167,6 +167,13 @@ export default {
       })
       this.$emit("update:content", { ...this.content, uploadedFiles: this.uploadedFiles })
     },
+    "content.uploadedFiles": {
+      handler(newVal) {
+        console.log("content.uploadedFiles newVal :", newVal)
+        this.uploadedFiles = newVal
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -204,6 +211,7 @@ export default {
   },
   mounted() {
     this.client = new UploadClient({ publicKey: this.content.publicKey })
+    this.$emit("update:content", { ...this.content, uploadedFiles: this.uploadedFiles })
   },
 }
 </script>
