@@ -16,7 +16,7 @@ export default {
       default: null,
     },
   },
-  emits: ["remove", "update:editingFile"],
+  emits: ["update:editingFile"],
   methods: {
     formatSize,
   },
@@ -40,9 +40,6 @@ export default {
         <td>{{ formatSize(file.size) }}</td>
         <td>
           <PVBadge :value="pending ? 'Pending' : 'Complete'" :severity="pending ? 'warning' : 'success'" />
-        </td>
-        <td>
-          <PVButton icon="pi pi-times" @click.stop="$emit('remove', { file, index })" rounded severity="danger" />
         </td>
       </tr>
     </table>

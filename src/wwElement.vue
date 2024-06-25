@@ -48,21 +48,12 @@
       </template>
       <template #content>
         <template v-if="content.style !== 'minimal'">
-          <FileThumbnails
-            :files="localFiles"
-            @remove="onRemoveTemplatingFile"
-            pending
-            v-model:editingFile="editingFile"
-          />
-          <FileThumbnails
-            :files="uploadedFiles"
-            @remove="removeUploadedFileCallback"
-            v-model:editingFile="editingFile"
-          />
+          <FileThumbnails :files="localFiles" pending v-model:editingFile="editingFile" />
+          <FileThumbnails :files="uploadedFiles" v-model:editingFile="editingFile" />
         </template>
         <template v-else>
-          <FileRows :files="localFiles" @remove="onRemoveTemplatingFile" pending v-model:editingFile="editingFile" />
-          <FileRows :files="uploadedFiles" @remove="removeUploadedFileCallback" v-model:editingFile="editingFile" />
+          <FileRows :files="localFiles" pending v-model:editingFile="editingFile" />
+          <FileRows :files="uploadedFiles" v-model:editingFile="editingFile" />
         </template>
 
         <FileModal
@@ -181,14 +172,6 @@ export default {
 
   methods: {
     formatSize,
-    onRemoveTemplatingFile(file, index) {
-      this.localFiles.splice(index, 1)
-    },
-    async removeUploadedFileCallback(index) {
-      const originalLength = this.uploadedFiles.length
-      this.uploadedFiles.splice(index, 1)
-      this.uploadProgressPercent = (this.uploadedFiles.length / originalLength) * 100
-    },
     uploadEvent() {},
     async onSelect(event) {
       const file = event.files[0]
