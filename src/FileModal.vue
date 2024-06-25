@@ -98,6 +98,9 @@ export default {
     blurData() {
       return this.enableBlur ? `-/blur/${this.blurRadius}/` : ""
     },
+    rootStyle() {
+      return this.content.style === "inline" ? { display: this.showEditFileModal ? "block" : "none" } : {}
+    },
   },
 
   watch: {
@@ -289,7 +292,7 @@ export default {
     :visible="showEditFileModal"
     @update:visible="$emit('update:showEditFileModal', $event)"
     modal
-    :style="content.style === 'inline' ? { display: showEditFileModal ? 'block' : 'none' } : {}"
+    :style="rootStyle"
   >
     <div v-if="content.style === 'inline'" class="flex justify-between">
       <h2>{{ editingFile?.name }}</h2>
