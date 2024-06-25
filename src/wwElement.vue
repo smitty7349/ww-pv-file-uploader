@@ -47,9 +47,14 @@
         </div>
       </template>
       <template #content>
+        <template v-if="content.style !== 'minimal'">
         <FileThumbnails :files="localFiles" @remove="onRemoveTemplatingFile" pending />
-
         <FileThumbnails :files="uploadedFiles" @remove="removeUploadedFileCallback" />
+        </template>
+        <template v-else>
+          <FileRows :files="localFiles" @remove="onRemoveTemplatingFile" pending />
+          <FileRows :files="uploadedFiles" @remove="removeUploadedFileCallback" />
+        </template>
 
         <FileModal
           v-if="content.style !== 'minimal'"
@@ -87,6 +92,7 @@ import { formatSize } from "./composables"
 import InputSwitch from "primevue/inputswitch"
 import InputText from "primevue/inputtext"
 import FileThumbnails from "./FileThumbnails.vue"
+import FileRows from "./FileRows.vue"
 
 export default {
   beforeCreate() {
@@ -113,6 +119,7 @@ export default {
   components: {
     FileModal,
     FileThumbnails,
+    FileRows,
   },
   props: {
     content: { type: Object, required: true },
