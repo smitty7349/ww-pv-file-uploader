@@ -65,6 +65,30 @@ Initial release
 
 ## Requirements
 
+### Round 2
+
+1. Basic / inline / minimal: design changes to bring it into fuller unity with Uploadcare
+   1. Minimal:
+      - should be a single button to begin with, no dropzone
+      - should show a condensed list of the photos
+   2. Inline:
+      - 'Close' button should work
+      - more space between all the tools (for this one, it appears like Tailwind took in my development environment but not in Weweb's production environment. Will take some research or switching to a different method of spacing)
+   3. Basic:
+      - modal isn't opening when you click the images
+      - filename should wrap or have ellipsis on the end
+      - bottom-aligned status chips should all be vertically aligned with each other
+      - progress bar should have a label 'Upload progress'
+2. Bugs:
+   1. Modal doesn't open when you click the images
+   2. 'X' button below images doesn't do anything (remove it)
+   3. Should allow uploading multiple at once
+   4. Uploaded files array not updating on upload
+   5. Copy button not working (this is an interesting one; I do have a confirmation message when it copies, so it must be having some problem, but I have the code set up where it attempts two different ways to copy, so it surprises me that it doesn't work 😅)
+3. the ability to change the "accept" value via a prop (string or array) or list of booleans (props). I want this component to accept and preview images, videos, files, etc.
+
+### Round 1
+
 - Has these capabilities, in the UI:
 
   - [x] scale_crop with smart (they can enter the dimensions)

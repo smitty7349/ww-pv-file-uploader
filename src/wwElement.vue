@@ -11,7 +11,7 @@
       :disabled="!content.publicKey"
     >
       <template #header="{ chooseCallback, uploadCallback, clearCallback }">
-        <div class="flex flex-wrap justify-between items-center flex-1 gap-2">
+        <div class="flex flex-wrap justify-between items-center flex-1 gap-2" v-if="content.style !== 'minimal'">
           <div class="flex gap-2">
             <PVButton @click="chooseCallback()" icon="pi pi-images" rounded :disabled="!content.publicKey"></PVButton>
             <!-- <PVButton
@@ -35,6 +35,15 @@
             :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto']"
             ><span class="white-space-nowrap">{{ uploadProgressPercent }}%</span></PVProgressBar
           >
+        </div>
+        <div v-else>
+          <PVButton
+            @click="chooseCallback()"
+            rounded
+            :disabled="!content.publicKey"
+            icon="pi pi-cloud-upload"
+            label="Upload file"
+          />
         </div>
       </template>
       <template #content>
@@ -84,7 +93,11 @@
         />
       </template>
       <template #empty>
-        <div class="flex items-center justify-center flex-col" :class="{ 'pointer-events-none': !content.publicKey }">
+        <div
+          v-if="content.style !== 'minimal'"
+          class="flex items-center justify-center flex-col"
+          :class="{ 'pointer-events-none': !content.publicKey }"
+        >
           <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400 rounded-full" />
           <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
         </div>
