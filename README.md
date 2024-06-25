@@ -20,6 +20,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 - it only shows a button for minimal style at first
 - it shows a condensed list of the photos for minimal style
+- fix 'close' button in inline style
 
 ### 0.0.8
 
@@ -77,7 +78,7 @@ Initial release
       - ✔️ should be a single button to begin with, no dropzone
       - ✔️ should show a condensed list of the photos
    2. Inline:
-      - 'Close' button should work
+      - ✔️ 'Close' button should work
       - more space between all the tools (for this one, it appears like Tailwind took in my development environment but not in Weweb's production environment. Will take some research or switching to a different method of spacing)
    3. Basic:
       - modal isn't opening when you click the images
