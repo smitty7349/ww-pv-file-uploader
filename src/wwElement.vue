@@ -47,43 +47,9 @@
         </div>
       </template>
       <template #content>
-        <div v-if="localFiles.length > 0">
-          <h5>Pending</h5>
-          <div class="flex flex-wrap p-0 sm:p-5 gap-5">
-            <div
-              v-for="(file, index) of localFiles"
-              :key="file.name + file.type + file.size"
-              class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
-            >
-              <div>
-                <img role="presentation" :alt="file.name" :src="file.objectURL" width="100" />
-              </div>
-              <span class="font-semibold">{{ file.name }}</span>
-              <div>{{ formatSize(file.size) }}</div>
-              <PVBadge value="Pending" severity="warning" />
-              <PVButton icon="pi pi-times" @click="onRemoveTemplatingFile(file, index)" rounded severity="danger" />
-            </div>
-          </div>
-        </div>
+        <FileThumbnails :files="localFiles" @remove="onRemoveTemplatingFile" pending />
 
-        <div v-if="uploadedFiles.length > 0">
-          <h5>Completed</h5>
-          <div class="flex flex-wrap p-0 sm:p-5 gap-5">
-            <div
-              v-for="(file, index) of uploadedFiles"
-              :key="file.name + file.type + file.size"
-              class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
-            >
-              <div @click="editingFile = file">
-                <img role="presentation" :alt="file.name" :src="file.cdnUrl" width="100" />
-              </div>
-              <span class="font-semibold">{{ file.name }}</span>
-              <div>{{ formatSize(file.size) }}</div>
-              <PVBadge value="Completed" class="mt-3" severity="success" />
-              <PVButton icon="pi pi-times" @click="removeUploadedFileCallback(index)" rounded severity="danger" />
-            </div>
-          </div>
-        </div>
+        <FileThumbnails :files="uploadedFiles" @remove="removeUploadedFileCallback" />
 
         <FileModal
           v-if="content.style !== 'minimal'"
@@ -120,6 +86,7 @@ import FileModal from "./FileModal.vue"
 import { formatSize } from "./composables"
 import InputSwitch from "primevue/inputswitch"
 import InputText from "primevue/inputtext"
+import FileThumbnails from "./FileThumbnails.vue"
 
 export default {
   beforeCreate() {
@@ -145,6 +112,7 @@ export default {
   },
   components: {
     FileModal,
+    FileThumbnails,
   },
   props: {
     content: { type: Object, required: true },
