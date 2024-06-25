@@ -16,6 +16,11 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
+### next
+
+- it only shows a button for minimal style at first
+- it shows a condensed list of the photos for minimal style
+
 ### 0.0.8
 
 - it has three style modes: basic, inline, minimal
@@ -69,8 +74,8 @@ Initial release
 
 1. Basic / inline / minimal: design changes to bring it into fuller unity with Uploadcare
    1. Minimal:
-      - should be a single button to begin with, no dropzone
-      - should show a condensed list of the photos
+      - ✔️ should be a single button to begin with, no dropzone
+      - ✔️ should show a condensed list of the photos
    2. Inline:
       - 'Close' button should work
       - more space between all the tools (for this one, it appears like Tailwind took in my development environment but not in Weweb's production environment. Will take some research or switching to a different method of spacing)
