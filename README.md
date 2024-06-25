@@ -16,12 +16,13 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
-### next
+### 0.0.9
 
 - it only shows a button for minimal style at first
 - it shows a condensed list of the photos for minimal style
 - fix 'close' button in inline style
 - (📐: attempt; please test) fix spacing in inline style between each transformation
+- remove 'x' button below images
 
 ### 0.0.8
 
@@ -88,7 +89,7 @@ Initial release
       - progress bar should have a label 'Upload progress'
 2. Bugs:
    1. Modal doesn't open when you click the images
-   2. 'X' button below images doesn't do anything (remove it)
+   2. ✔️ 'X' button below images doesn't do anything (remove it)
    3. Should allow uploading multiple at once
    4. Uploaded files array not updating on upload
    5. Copy button not working (this is an interesting one; I do have a confirmation message when it copies, so it must be having some problem, but I have the code set up where it attempts two different ways to copy, so it surprises me that it doesn't work 😅)
