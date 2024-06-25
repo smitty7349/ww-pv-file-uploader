@@ -322,144 +322,153 @@ export default {
         </div>
       </div>
     </div>
-    <h3 v-if="anyTransformationsEnabled">Transformations</h3>
-    <div v-if="content.enableScaleCrop">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="smartScaleCrop" />
-          <span class="ml-3">Smart scale crop</span>
-        </div>
-      </h4>
-      <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
-      <p class="mt-3">
-        <span>Dimensions: </span>
-        <span>
-          <PVInputText type="number" v-model="scaleCropDimensionsX" size="small" />
-        </span>
-        <span>x</span>
-        <span>
-          <PVInputText type="number" v-model="scaleCropDimensionsY" size="small" />
-        </span>
-      </p>
-    </div>
-    <div v-if="content.enableRotate">
-      <h4>
-        <div class="flex items-center">
-          <PVButton label="Rotate" icon="pi pi-refresh" @click="rotateImage" />
-        </div>
-      </h4>
-    </div>
-    <div v-if="content.enableWatermark">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableWatermark" />
-          <span class="ml-3">Watermark</span>
-        </div>
-      </h4>
-      <p>Apply a watermark to the image, using another image's UUID</p>
-      <p class="mt-3">
-        <span>Watermark UUID: </span>
-        <span>
-          <PVInputText type="text" v-model="watermarkUuid" size="small" />
-        </span>
-      </p>
-      <p class="flex items-center mt-3">
-        <span>Opacity: </span>
-        <span class="ml-3">
-          <PVInputText type="number" v-model="watermarkOpacity" :min="0" :max="100" style="width: 150px" size="small" />
-        </span>
-      </p>
-    </div>
-    <div v-if="content.enableAutoFormat">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableAutoFormat" />
-          <span class="ml-3">Auto format</span>
-        </div>
-      </h4>
-      <p>Automatically convert the image to the right format for whatever device it will be viewed on.</p>
-    </div>
-    <div v-if="content.enableAutoQuality">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableAutoQuality" />
-          <span class="ml-3">Auto quality</span>
-        </div>
-      </h4>
-      <p>
-        Automatically adjust the quality of the image to achieve the best visual quality and the smallest file size.
-      </p>
-    </div>
-    <div v-if="content.enableAutoProfilePicture">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableAutoProfilePicture" />
-          <span class="ml-3">Auto profile picture</span>
-        </div>
-      </h4>
-      <p>Automatically crop the image to a square, centering the face, and resizing it to 200x200 pixels.</p>
-    </div>
-    <div v-if="content.enablePreview">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enablePreview" />
-          <span class="ml-3">Preview</span>
-        </div>
-      </h4>
-      <p>Downscale the image for preview purposes.</p>
-      <p class="mt-3">
-        <span>Dimensions: </span>
-        <span>
-          <PVInputText type="number" v-model="previewDimensionsX" size="small" />
-        </span>
-        <span>x</span>
-        <span>
-          <PVInputText type="number" v-model="previewDimensionsY" size="small" />
-        </span>
-      </p>
-    </div>
-    <div v-if="content.enableGrayscale">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableGrayscale" />
-          <span class="ml-3">Grayscale</span>
-        </div>
-      </h4>
-      <p>Convert the image to grayscale.</p>
-    </div>
-    <div v-if="content.enableSmartResize">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableSmartResize" />
-          <span class="ml-3">Smart resize</span>
-        </div>
-      </h4>
-      <p>Keep proportions, but fill the specified dimensions, by generating what's missing.</p>
-      <p class="mt-3">
-        <span>Dimensions: </span>
-        <span>
-          <PVInputText type="number" v-model="smartResizeDimensionsX" size="small" />
-        </span>
-        <span>x</span>
-        <span>
-          <PVInputText type="number" v-model="smartResizeDimensionsY" size="small" />
-        </span>
-      </p>
-    </div>
-    <div v-if="content.enableBlur">
-      <h4>
-        <div class="flex items-center">
-          <PVInputSwitch v-model="enableBlur" />
-          <span class="ml-3">Blur</span>
-        </div>
-      </h4>
-      <p>Blur the image.</p>
-      <p class="mt-3">
-        <span>Radius: </span>
-        <span>
-          <PVInputText type="number" v-model="blurRadius" :min="0" :max="100" size="small" />
-        </span>
-      </p>
+    <div class="flex gap-5 flex-col">
+      <h3 v-if="anyTransformationsEnabled">Transformations</h3>
+      <div v-if="content.enableScaleCrop">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="smartScaleCrop" />
+            <span class="ml-3">Smart scale crop</span>
+          </div>
+        </h4>
+        <p>Resize the image to fit the specified dimensions, cropping the image to keep the aspect ratio.</p>
+        <p class="mt-3">
+          <span>Dimensions: </span>
+          <span>
+            <PVInputText type="number" v-model="scaleCropDimensionsX" size="small" />
+          </span>
+          <span>x</span>
+          <span>
+            <PVInputText type="number" v-model="scaleCropDimensionsY" size="small" />
+          </span>
+        </p>
+      </div>
+      <div v-if="content.enableRotate">
+        <h4>
+          <div class="flex items-center">
+            <PVButton label="Rotate" icon="pi pi-refresh" @click="rotateImage" />
+          </div>
+        </h4>
+      </div>
+      <div v-if="content.enableWatermark">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableWatermark" />
+            <span class="ml-3">Watermark</span>
+          </div>
+        </h4>
+        <p>Apply a watermark to the image, using another image's UUID</p>
+        <p class="mt-3">
+          <span>Watermark UUID: </span>
+          <span>
+            <PVInputText type="text" v-model="watermarkUuid" size="small" />
+          </span>
+        </p>
+        <p class="flex items-center mt-3">
+          <span>Opacity: </span>
+          <span class="ml-3">
+            <PVInputText
+              type="number"
+              v-model="watermarkOpacity"
+              :min="0"
+              :max="100"
+              style="width: 150px"
+              size="small"
+            />
+          </span>
+        </p>
+      </div>
+      <div v-if="content.enableAutoFormat">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableAutoFormat" />
+            <span class="ml-3">Auto format</span>
+          </div>
+        </h4>
+        <p>Automatically convert the image to the right format for whatever device it will be viewed on.</p>
+      </div>
+      <div v-if="content.enableAutoQuality">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableAutoQuality" />
+            <span class="ml-3">Auto quality</span>
+          </div>
+        </h4>
+        <p>
+          Automatically adjust the quality of the image to achieve the best visual quality and the smallest file size.
+        </p>
+      </div>
+      <div v-if="content.enableAutoProfilePicture">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableAutoProfilePicture" />
+            <span class="ml-3">Auto profile picture</span>
+          </div>
+        </h4>
+        <p>Automatically crop the image to a square, centering the face, and resizing it to 200x200 pixels.</p>
+      </div>
+      <div v-if="content.enablePreview">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enablePreview" />
+            <span class="ml-3">Preview</span>
+          </div>
+        </h4>
+        <p>Downscale the image for preview purposes.</p>
+        <p class="mt-3">
+          <span>Dimensions: </span>
+          <span>
+            <PVInputText type="number" v-model="previewDimensionsX" size="small" />
+          </span>
+          <span>x</span>
+          <span>
+            <PVInputText type="number" v-model="previewDimensionsY" size="small" />
+          </span>
+        </p>
+      </div>
+      <div v-if="content.enableGrayscale">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableGrayscale" />
+            <span class="ml-3">Grayscale</span>
+          </div>
+        </h4>
+        <p>Convert the image to grayscale.</p>
+      </div>
+      <div v-if="content.enableSmartResize">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableSmartResize" />
+            <span class="ml-3">Smart resize</span>
+          </div>
+        </h4>
+        <p>Keep proportions, but fill the specified dimensions, by generating what's missing.</p>
+        <p class="mt-3">
+          <span>Dimensions: </span>
+          <span>
+            <PVInputText type="number" v-model="smartResizeDimensionsX" size="small" />
+          </span>
+          <span>x</span>
+          <span>
+            <PVInputText type="number" v-model="smartResizeDimensionsY" size="small" />
+          </span>
+        </p>
+      </div>
+      <div v-if="content.enableBlur">
+        <h4>
+          <div class="flex items-center">
+            <PVInputSwitch v-model="enableBlur" />
+            <span class="ml-3">Blur</span>
+          </div>
+        </h4>
+        <p>Blur the image.</p>
+        <p class="mt-3">
+          <span>Radius: </span>
+          <span>
+            <PVInputText type="number" v-model="blurRadius" :min="0" :max="100" size="small" />
+          </span>
+        </p>
+      </div>
     </div>
   </Component>
 </template>
