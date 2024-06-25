@@ -11,7 +11,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    editingFile: {
+      type: Object,
+      default: null,
+    },
   },
+  emits: ["remove", "update:editingFile"],
   methods: {
     formatSize,
   },
@@ -26,6 +31,7 @@ export default {
         v-for="(file, index) of files"
         :key="file.name + file.type + file.size"
         class="card m-0 px-6 flex border surface-border items-center gap-3"
+        @click="$emit('update:editingFile', file)"
       >
         <td>
           <img role="presentation" :alt="file.name" :src="file.objectURL || file.cdnUrl" width="50" />
@@ -36,7 +42,7 @@ export default {
           <PVBadge :value="pending ? 'Pending' : 'Complete'" :severity="pending ? 'warning' : 'success'" />
         </td>
         <td>
-          <PVButton icon="pi pi-times" @click="$emit('remove', { file, index })" rounded severity="danger" />
+          <PVButton icon="pi pi-times" @click.stop="$emit('remove', { file, index })" rounded severity="danger" />
         </td>
       </tr>
     </table>

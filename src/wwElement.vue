@@ -48,12 +48,21 @@
       </template>
       <template #content>
         <template v-if="content.style !== 'minimal'">
-        <FileThumbnails :files="localFiles" @remove="onRemoveTemplatingFile" pending />
-        <FileThumbnails :files="uploadedFiles" @remove="removeUploadedFileCallback" />
+          <FileThumbnails
+            :files="localFiles"
+            @remove="onRemoveTemplatingFile"
+            pending
+            v-model:editingFile="editingFile"
+          />
+          <FileThumbnails
+            :files="uploadedFiles"
+            @remove="removeUploadedFileCallback"
+            v-model:editingFile="editingFile"
+          />
         </template>
         <template v-else>
-          <FileRows :files="localFiles" @remove="onRemoveTemplatingFile" pending />
-          <FileRows :files="uploadedFiles" @remove="removeUploadedFileCallback" />
+          <FileRows :files="localFiles" @remove="onRemoveTemplatingFile" pending v-model:editingFile="editingFile" />
+          <FileRows :files="uploadedFiles" @remove="removeUploadedFileCallback" v-model:editingFile="editingFile" />
         </template>
 
         <FileModal
