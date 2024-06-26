@@ -16,7 +16,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 ## Releases
 
-### next
+### 0.0.10
 
 - fix modal not opening when clicking images
 - fix filename with ellipsis
