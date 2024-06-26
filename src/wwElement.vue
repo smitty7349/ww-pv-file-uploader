@@ -204,7 +204,11 @@ export default {
     limitFileName,
     uploadEvent() {},
     async onSelect(event) {
-      const file = event.files[0]
+      for (const file of event.files) {
+        await this.uploadFile(file)
+      }
+    },
+    async uploadFile(file) {
       this.localFiles.push(file)
       console.log("this.localFiles :", this.localFiles)
       this.uploadProgressPercent = 0
