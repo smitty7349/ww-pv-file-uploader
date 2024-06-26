@@ -26,13 +26,15 @@
               icon="pi pi-times"
               rounded
               severity="danger"
-              :disabled="!content.publicKey || !localFiles || localFiles.length === 0"
+              v-if="content.publicKey && localFiles && localFiles.length > 0"
             ></PVButton>
           </div>
+          <span class="text-xs italic text-gray-700 md:ml-auto">Upload progress</span>
           <PVProgressBar
             :value="uploadProgressPercent"
             :showValue="false"
-            :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto']"
+            :class="['md:w-[20rem] h-[1rem] w-full']"
+            label="Upload progress"
             ><span class="white-space-nowrap">{{ uploadProgressPercent }}%</span></PVProgressBar
           >
         </div>

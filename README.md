@@ -20,6 +20,8 @@ Before release, you can check build error by running `npm run build --name=my-el
 
 - fix modal not opening when clicking images
 - fix filename with ellipsis
+- fix bottom-aligned status chips
+- add 'Upload progress' label to progress bar
 
 ### 0.0.9
 
@@ -90,8 +92,8 @@ Initial release
    3. Basic:
       - ✔️ modal isn't opening when you click the images
       - ✔️ filename should wrap or have ellipsis on the end
-      - bottom-aligned status chips should all be vertically aligned with each other
-      - progress bar should have a label 'Upload progress'
+      - ✔️ bottom-aligned status chips should all be vertically aligned with each other
+      - ✔️ progress bar should have a label 'Upload progress'
 2. Bugs:
    1. ✔️ Modal doesn't open when you click the images
    2. ✔️ 'X' button below images doesn't do anything (remove it)
