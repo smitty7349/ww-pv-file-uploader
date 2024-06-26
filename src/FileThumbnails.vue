@@ -31,15 +31,15 @@ export default {
       <div
         v-for="(file, index) of files"
         :key="file.name + file.type + file.size"
-        class="card m-0 px-6 flex flex-col border surface-border items-center gap-3"
+        class="card m-0 px-6 py-4 flex flex-col border surface-border items-center gap-3"
         @click="$emit('update:editingFile', file)"
       >
-        <div>
-          <img role="presentation" :alt="file.name" :src="file.objectURL || file.cdnUrl" width="100" />
+        <div class="flex h-24">
+          <img role="presentation" :alt="file.name" :src="file.objectURL || file.cdnUrl" class="w-24 my-auto" />
         </div>
-        <span class="font-semibold">{{ limitFileName(file.name) }}</span>
-        <div>{{ formatSize(file.size) }}</div>
-        <PVBadge :value="pending ? 'Pending' : 'Complete'" :severity="pending ? 'warning' : 'success'" />
+        <span class="font-semibold flex-1">{{ limitFileName(file.name) }}</span>
+        <div class="flex-1">{{ formatSize(file.size) }}</div>
+        <PVBadge :value="pending ? 'Pending' : 'Complete'" :severity="pending ? 'warning' : 'success'" class="flex-1" />
       </div>
     </div>
   </div>
