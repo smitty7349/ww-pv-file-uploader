@@ -65,7 +65,7 @@
             />
           </div>
           <PVDialog
-            :header="editingFile?.name"
+            :header="limitFileName(editingFile?.name)"
             :visible="content.style === 'basic' && showEditFileModal"
             @update:visible="showEditFileModal = $event"
             modal
@@ -102,7 +102,7 @@ import "primevue/resources/themes/aura-light-green/theme.css"
 import "primeicons/primeicons.css"
 import { UploadClient } from "@uploadcare/upload-client"
 import Dialog from "primevue/dialog"
-import { formatSize } from "./composables"
+import { formatSize, limitFileName } from "./composables"
 import InputSwitch from "primevue/inputswitch"
 import InputText from "primevue/inputtext"
 import FileThumbnails from "./FileThumbnails.vue"
@@ -199,6 +199,7 @@ export default {
 
   methods: {
     formatSize,
+    limitFileName,
     uploadEvent() {},
     async onSelect(event) {
       const file = event.files[0]

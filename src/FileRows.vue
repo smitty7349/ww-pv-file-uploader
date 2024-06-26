@@ -1,5 +1,5 @@
 <script>
-import { formatSize } from "./composables"
+import { formatSize, limitFileName } from "./composables"
 
 export default {
   props: {
@@ -19,6 +19,7 @@ export default {
   emits: ["update:editingFile"],
   methods: {
     formatSize,
+    limitFileName,
   },
 }
 </script>
@@ -36,7 +37,7 @@ export default {
         <td>
           <img role="presentation" :alt="file.name" :src="file.objectURL || file.cdnUrl" width="50" />
         </td>
-        <td class="font-semibold">{{ file.name }}</td>
+        <td class="font-semibold">{{ limitFileName(file.name) }}</td>
         <td>{{ formatSize(file.size) }}</td>
         <td>
           <PVBadge :value="pending ? 'Pending' : 'Complete'" :severity="pending ? 'warning' : 'success'" />
