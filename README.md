@@ -19,6 +19,7 @@ Before release, you can check build error by running `npm run build --name=my-el
 ### next
 
 - fix modal not opening when clicking images
+- fix filename with ellipsis
 
 ### 0.0.9
 
@@ -88,7 +89,7 @@ Initial release
       - ✔️ 📐 more space between all the tools (for this one, it appears like Tailwind took in my development environment but not in Weweb's production environment. Will take some research or switching to a different method of spacing)
    3. Basic:
       - ✔️ modal isn't opening when you click the images
-      - filename should wrap or have ellipsis on the end
+      - ✔️ filename should wrap or have ellipsis on the end
       - bottom-aligned status chips should all be vertically aligned with each other
       - progress bar should have a label 'Upload progress'
 2. Bugs:
