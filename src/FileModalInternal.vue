@@ -287,7 +287,7 @@ export default {
 
 <template>
   <div>
-    <div v-if="content.style === 'inline'" class="flex justify-between">
+    <div v-if="content.style === 'inline'" class="flex justify-between mb-3">
       <h2>{{ editingFile?.name }}</h2>
       <PVButton label="Close" @click="$emit('update:showEditFileModal', false)" />
     </div>
