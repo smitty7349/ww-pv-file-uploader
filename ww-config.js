@@ -39,6 +39,7 @@ export default {
           { value: "minimal", label: { en: "Minimal" }, icon: "" },
         ],
       },
+      defaultValue: "basic",
     },
     uploadedFiles: {
       label: {

@@ -286,14 +286,7 @@ export default {
 </script>
 
 <template>
-  <Component
-    :is="content.style === 'inline' ? 'div' : Dialog"
-    :header="editingFile?.name"
-    :visible="showEditFileModal"
-    @update:visible="$emit('update:showEditFileModal', $event)"
-    modal
-    :style="rootStyle"
-  >
+  <div>
     <div v-if="content.style === 'inline'" class="flex justify-between">
       <h2>{{ editingFile?.name }}</h2>
       <PVButton label="Close" @click="$emit('update:showEditFileModal', false)" />
@@ -470,5 +463,5 @@ export default {
         </p>
       </div>
     </div>
-  </Component>
+  </div>
 </template>

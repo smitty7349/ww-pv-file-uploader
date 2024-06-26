@@ -56,12 +56,27 @@
           <FileRows :files="uploadedFiles" v-model:editingFile="editingFile" />
         </template>
 
-        <FileModal
-          v-if="content.style !== 'minimal'"
+        <template v-if="content.style !== 'minimal'">
+          <div v-if="content.style === 'inline'" :style="rootStyle">
+            <FileModalInternal
+              v-model:editingFile="editingFile"
+              v-model:showEditFileModal="showEditFileModal"
+              :content="content"
+            />
+          </div>
+          <PVDialog
+            :header="editingFile?.name"
+            :visible="content.style === 'basic' && showEditFileModal"
+            @update:visible="showEditFileModal = $event"
+            modal
+          >
+            <FileModalInternal
           v-model:editingFile="editingFile"
           v-model:showEditFileModal="showEditFileModal"
           :content="content"
         />
+          </PVDialog>
+        </template>
       </template>
       <template #empty>
         <div
@@ -87,12 +102,12 @@ import "primevue/resources/themes/aura-light-green/theme.css"
 import "primeicons/primeicons.css"
 import { UploadClient } from "@uploadcare/upload-client"
 import Dialog from "primevue/dialog"
-import FileModal from "./FileModal.vue"
 import { formatSize } from "./composables"
 import InputSwitch from "primevue/inputswitch"
 import InputText from "primevue/inputtext"
 import FileThumbnails from "./FileThumbnails.vue"
 import FileRows from "./FileRows.vue"
+import FileModalInternal from "./FileModalInternal.vue"
 
 export default {
   beforeCreate() {
@@ -117,7 +132,7 @@ export default {
     this.$.appContext.app.component("PVInputText", InputText)
   },
   components: {
-    FileModal,
+    FileModalInternal,
     FileThumbnails,
     FileRows,
   },
@@ -141,8 +156,20 @@ export default {
     }
   },
 
+  computed: {
+    rootStyle() {
+      return this.content.style === "inline" ? { display: this.showEditFileModal ? "block" : "none" } : {}
+    },
+  },
+
   watch: {
+    showEditFileModal() {
+      if (!this.showEditFileModal) {
+        this.editingFile = null
+      }
+    },
     editingFile(newVal, oldVal) {
+      this.showEditFileModal = !!newVal
       if (!newVal) return
       if (oldVal && newVal)
         this.$emit("trigger-event", {
