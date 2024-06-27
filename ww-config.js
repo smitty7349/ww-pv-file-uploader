@@ -17,6 +17,20 @@ export default {
         uuid: "",
       },
     },
+    {
+      name: "update:uploaded-files",
+      label: {
+        en: "Update to uploaded files",
+      },
+      event: [
+        {
+          cdnUrl: "",
+          fileName: "",
+          size: 0,
+          uuid: "",
+        },
+      ],
+    },
   ],
   properties: {
     publicKey: {
@@ -40,6 +54,15 @@ export default {
         ],
       },
       defaultValue: "basic",
+    },
+    accept: {
+      label: {
+        en: "Accept",
+      },
+      type: "Text",
+      bindable: true,
+      responsive: true,
+      defaultValue: "image/*",
     },
     uploadedFiles: {
       label: {

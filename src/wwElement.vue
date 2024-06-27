@@ -3,7 +3,7 @@
     <PVFileUpload
       name="demo[]"
       :multiple="true"
-      accept="image/*"
+      :accept="content.accept"
       auto
       :maxFileSize="1000000"
       customUpload
@@ -11,6 +11,7 @@
       :disabled="!content.publicKey"
     >
       <template #header="{ chooseCallback, uploadCallback, clearCallback }">
+        <pre class="hidden">content.accept: {{ content.accept }}</pre>
         <div class="flex flex-wrap justify-between items-center flex-1 gap-2" v-if="content.style !== 'minimal'">
           <div class="flex gap-2">
             <PVButton @click="chooseCallback()" icon="pi pi-images" rounded :disabled="!content.publicKey"></PVButton>
@@ -141,6 +142,7 @@ export default {
   props: {
     content: { type: Object, required: true },
   },
+  emits: ["update:content", "trigger-event", "update:uploaded-files", "update:editing-file", "update:content:effect"],
   data() {
     return {
       totalSize: 0,
@@ -204,6 +206,7 @@ export default {
     limitFileName,
     uploadEvent() {},
     async onSelect(event) {
+      console.log("onSelect event :", event)
       for (const file of event.files) {
         await this.uploadFile(file)
       }
@@ -225,13 +228,23 @@ export default {
         },
       })
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
-      this.uploadedFiles.push(result)
+      this.uploadedFiles = [...this.uploadedFiles, result]
       console.log("this.uploadedFiles :", this.uploadedFiles)
+      this.$emit("update:content:effect", {
+        uploadedFiles: this.uploadedFiles,
+      })
+      this.$emit("trigger-event", {
+        name: "update:uploaded-files",
+        event: {
+          uploadedFiles: this.uploadedFiles,
+        },
+      })
+      console.log("this.content :", this.content)
     },
   },
   mounted() {
     this.client = new UploadClient({ publicKey: this.content.publicKey })
-    this.$emit("update:content", { ...this.content, uploadedFiles: this.uploadedFiles })
+    this.$emit("update:content:effect", { uploadedFiles: this.uploadedFiles })
   },
 }
 </script>
