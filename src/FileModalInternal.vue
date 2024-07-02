@@ -259,6 +259,7 @@ export default {
       link.click()
     },
     async copyLink() {
+      this.$emit("trigger-event", { name: "copy-link", event: this.editingFile.cdnUrl })
       try {
         navigator.clipboard.writeText(this.editingFile.cdnUrl)
       } catch (error) {

@@ -21,6 +21,8 @@ Before release, you can check build error by running `npm run build --name=my-el
 - allow uploading multiple at once
 - one small change to test the copy button
 - accept prop
+- emit an event for the uploaded files array (since the array is not updating on upload)
+- emit an event for copying the link
 
 ### 0.0.10
 

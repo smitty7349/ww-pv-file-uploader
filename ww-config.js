@@ -31,6 +31,13 @@ export default {
         },
       ],
     },
+    {
+      name: "copy-link",
+      label: {
+        en: "Copy link",
+      },
+      event: "",
+    },
   ],
   properties: {
     publicKey: {
