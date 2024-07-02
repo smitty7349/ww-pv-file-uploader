@@ -3,7 +3,8 @@
     <PVFileUpload
       name="demo[]"
       :multiple="true"
-      :accept="content.accept"
+      :accept="content_accept"
+      :key="content_accept_key"
       auto
       :maxFileSize="1000000"
       customUpload
@@ -11,7 +12,6 @@
       :disabled="!content.publicKey"
     >
       <template #header="{ chooseCallback, uploadCallback, clearCallback }">
-        <pre class="hidden">content.accept: {{ content.accept }}</pre>
         <div class="flex flex-wrap justify-between items-center flex-1 gap-2" v-if="content.style !== 'minimal'">
           <div class="flex gap-2">
             <PVButton @click="chooseCallback()" icon="pi pi-images" rounded :disabled="!content.publicKey"></PVButton>
@@ -157,12 +157,16 @@ export default {
       uploadProgressPercent: 0,
       editingFile: null,
       showEditFileModal: false,
+      content_accept_key: 0,
     }
   },
 
   computed: {
     rootStyle() {
       return this.content.style === "inline" ? { display: this.showEditFileModal ? "block" : "none" } : {}
+    },
+    content_accept() {
+      return this.content.accept ? this.content.accept : null
     },
   },
 
@@ -198,6 +202,9 @@ export default {
         this.uploadedFiles = newVal
       },
       deep: true,
+    },
+    content_accept() {
+      this.content_accept_key++
     },
   },
 

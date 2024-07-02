@@ -260,7 +260,7 @@ export default {
     },
     async copyLink() {
       try {
-        await navigator.clipboard.writeText(this.editingFile.cdnUrl)
+        navigator.clipboard.writeText(this.editingFile.cdnUrl)
       } catch (error) {
         console.warn("Failed to copy: ", error)
         // Try another way
