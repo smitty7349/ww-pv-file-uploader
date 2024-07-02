@@ -19,6 +19,8 @@ Before release, you can check build error by running `npm run build --name=my-el
 ### next
 
 - allow uploading multiple at once
+- one small change to test the copy button
+- accept prop
 
 ### 0.0.10
 
@@ -102,9 +104,9 @@ Initial release
    1. ✔️ Modal doesn't open when you click the images
    2. ✔️ 'X' button below images doesn't do anything (remove it)
    3. ✔️ Should allow uploading multiple at once
-   4. Uploaded files array not updating on upload
-   5. Copy button not working (this is an interesting one; I do have a confirmation message when it copies, so it must be having some problem, but I have the code set up where it attempts two different ways to copy, so it surprises me that it doesn't work 😅)
-3. the ability to change the "accept" value via a prop (string or array) or list of booleans (props). I want this component to accept and preview images, videos, files, etc.
+   4. ⏳ Uploaded files array not updating on upload
+   5. ⏳ Copy button not working (this is an interesting one; I do have a confirmation message when it copies, so it must be having some problem, but I have the code set up where it attempts two different ways to copy, so it surprises me that it doesn't work 😅)
+3. ✔️ the ability to change the "accept" value via a prop (string or array) or list of booleans (props). I want this component to accept and preview images, videos, files, etc.
 
 ### Round 1
 
