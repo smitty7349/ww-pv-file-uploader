@@ -259,8 +259,9 @@ export default {
       link.click()
     },
     async copyLink() {
+      this.$emit("trigger-event", { name: "copy-link", event: this.editingFile.cdnUrl })
       try {
-        await navigator.clipboard.writeText(this.editingFile.cdnUrl)
+        navigator.clipboard.writeText(this.editingFile.cdnUrl)
       } catch (error) {
         console.warn("Failed to copy: ", error)
         // Try another way
@@ -286,15 +287,8 @@ export default {
 </script>
 
 <template>
-  <Component
-    :is="content.style === 'inline' ? 'div' : Dialog"
-    :header="editingFile?.name"
-    :visible="showEditFileModal"
-    @update:visible="$emit('update:showEditFileModal', $event)"
-    modal
-    :style="rootStyle"
-  >
-    <div v-if="content.style === 'inline'" class="flex justify-between">
+  <div>
+    <div v-if="content.style === 'inline'" class="flex justify-between mb-3">
       <h2>{{ editingFile?.name }}</h2>
       <PVButton label="Close" @click="$emit('update:showEditFileModal', false)" />
     </div>
@@ -470,5 +464,5 @@ export default {
         </p>
       </div>
     </div>
-  </Component>
+  </div>
 </template>
