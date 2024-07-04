@@ -17,6 +17,27 @@ export default {
         uuid: "",
       },
     },
+    {
+      name: "update:uploaded-files",
+      label: {
+        en: "Update to uploaded files",
+      },
+      event: [
+        {
+          cdnUrl: "",
+          fileName: "",
+          size: 0,
+          uuid: "",
+        },
+      ],
+    },
+    {
+      name: "copy-link",
+      label: {
+        en: "Copy link",
+      },
+      event: "",
+    },
   ],
   properties: {
     publicKey: {
@@ -39,6 +60,16 @@ export default {
           { value: "minimal", label: { en: "Minimal" }, icon: "" },
         ],
       },
+      defaultValue: "basic",
+    },
+    accept: {
+      label: {
+        en: "Accept",
+      },
+      type: "Text",
+      bindable: true,
+      responsive: true,
+      defaultValue: "image/*",
     },
     uploadedFiles: {
       label: {

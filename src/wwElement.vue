@@ -3,7 +3,8 @@
     <PVFileUpload
       name="demo[]"
       :multiple="true"
-      accept="image/*"
+      :accept="content_accept"
+      :key="content_accept_key"
       auto
       :maxFileSize="1000000"
       customUpload
@@ -26,13 +27,15 @@
               icon="pi pi-times"
               rounded
               severity="danger"
-              :disabled="!content.publicKey || !localFiles || localFiles.length === 0"
+              v-if="content.publicKey && localFiles && localFiles.length > 0"
             ></PVButton>
           </div>
+          <span class="text-xs italic text-gray-700 md:ml-auto">Upload progress</span>
           <PVProgressBar
             :value="uploadProgressPercent"
             :showValue="false"
-            :class="['md:w-[20rem] h-[1rem] w-full md:ml-auto']"
+            :class="['md:w-[20rem] h-[1rem] w-full']"
+            label="Upload progress"
             ><span class="white-space-nowrap">{{ uploadProgressPercent }}%</span></PVProgressBar
           >
         </div>
@@ -56,12 +59,27 @@
           <FileRows :files="uploadedFiles" v-model:editingFile="editingFile" />
         </template>
 
-        <FileModal
-          v-if="content.style !== 'minimal'"
+        <template v-if="content.style !== 'minimal'">
+          <div v-if="content.style === 'inline'" :style="rootStyle">
+            <FileModalInternal
+              v-model:editingFile="editingFile"
+              v-model:showEditFileModal="showEditFileModal"
+              :content="content"
+            />
+          </div>
+          <PVDialog
+            :header="limitFileName(editingFile?.name)"
+            :visible="content.style === 'basic' && showEditFileModal"
+            @update:visible="showEditFileModal = $event"
+            modal
+          >
+            <FileModalInternal
           v-model:editingFile="editingFile"
           v-model:showEditFileModal="showEditFileModal"
           :content="content"
         />
+          </PVDialog>
+        </template>
       </template>
       <template #empty>
         <div
@@ -87,12 +105,12 @@ import "primevue/resources/themes/aura-light-green/theme.css"
 import "primeicons/primeicons.css"
 import { UploadClient } from "@uploadcare/upload-client"
 import Dialog from "primevue/dialog"
-import FileModal from "./FileModal.vue"
-import { formatSize } from "./composables"
+import { formatSize, limitFileName } from "./composables"
 import InputSwitch from "primevue/inputswitch"
 import InputText from "primevue/inputtext"
 import FileThumbnails from "./FileThumbnails.vue"
 import FileRows from "./FileRows.vue"
+import FileModalInternal from "./FileModalInternal.vue"
 
 export default {
   beforeCreate() {
@@ -117,13 +135,14 @@ export default {
     this.$.appContext.app.component("PVInputText", InputText)
   },
   components: {
-    FileModal,
+    FileModalInternal,
     FileThumbnails,
     FileRows,
   },
   props: {
     content: { type: Object, required: true },
   },
+  emits: ["update:content", "trigger-event", "update:uploaded-files", "update:editing-file", "update:content:effect"],
   data() {
     return {
       totalSize: 0,
@@ -138,11 +157,27 @@ export default {
       uploadProgressPercent: 0,
       editingFile: null,
       showEditFileModal: false,
+      content_accept_key: 0,
     }
   },
 
+  computed: {
+    rootStyle() {
+      return this.content.style === "inline" ? { display: this.showEditFileModal ? "block" : "none" } : {}
+    },
+    content_accept() {
+      return this.content.accept ? this.content.accept : null
+    },
+  },
+
   watch: {
+    showEditFileModal() {
+      if (!this.showEditFileModal) {
+        this.editingFile = null
+      }
+    },
     editingFile(newVal, oldVal) {
+      this.showEditFileModal = !!newVal
       if (!newVal) return
       if (oldVal && newVal)
         this.$emit("trigger-event", {
@@ -168,13 +203,22 @@ export default {
       },
       deep: true,
     },
+    content_accept() {
+      this.content_accept_key++
+    },
   },
 
   methods: {
     formatSize,
+    limitFileName,
     uploadEvent() {},
     async onSelect(event) {
-      const file = event.files[0]
+      console.log("onSelect event :", event)
+      for (const file of event.files) {
+        await this.uploadFile(file)
+      }
+    },
+    async uploadFile(file) {
       this.localFiles.push(file)
       console.log("this.localFiles :", this.localFiles)
       this.uploadProgressPercent = 0
@@ -191,13 +235,23 @@ export default {
         },
       })
       this.localFiles.splice(this.localFiles.indexOf(file), 1)
-      this.uploadedFiles.push(result)
+      this.uploadedFiles = [...this.uploadedFiles, result]
       console.log("this.uploadedFiles :", this.uploadedFiles)
+      this.$emit("update:content:effect", {
+        uploadedFiles: this.uploadedFiles,
+      })
+      this.$emit("trigger-event", {
+        name: "update:uploaded-files",
+        event: {
+          uploadedFiles: this.uploadedFiles,
+        },
+      })
+      console.log("this.content :", this.content)
     },
   },
   mounted() {
     this.client = new UploadClient({ publicKey: this.content.publicKey })
-    this.$emit("update:content", { ...this.content, uploadedFiles: this.uploadedFiles })
+    this.$emit("update:content:effect", { uploadedFiles: this.uploadedFiles })
   },
 }
 </script>
